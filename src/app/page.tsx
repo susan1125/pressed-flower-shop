@@ -78,7 +78,7 @@ export default function HomePage() {
           </div>
 
           <h1 className="max-w-xl text-5xl font-semibold leading-[1.06] tracking-normal text-[#3d362e] sm:text-6xl lg:text-7xl">
-            把春天压进日常里
+            把春天押进日常里
           </h1>
           <p className="mt-6 max-w-xl text-base leading-8 text-[#6d6258] sm:text-lg">
             押花小铺制作书签、台灯、团扇、画框与随身小物。每一片花瓣都来自真实花材，经过干燥、排版、封存后成为独一份作品。
