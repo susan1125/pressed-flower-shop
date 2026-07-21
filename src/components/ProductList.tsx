@@ -19,7 +19,7 @@ export default function ProductList({ products }: { products: Product[] }) {
       {filtered.length === 0 ? (
         <div className="pressed-paper rounded-3xl py-20 text-center">
           <p className="text-lg font-semibold text-[#3b332d]">暂无作品</p>
-          <p className="mt-2 text-sm text-[#8d8176]">敬请期待更多手工押花作品。</p>
+          <p className="mt-2 text-sm text-[#8d8176]">敬请期待更多沁瓣手作。</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">

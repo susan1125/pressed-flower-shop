@@ -15,8 +15,8 @@ export default function CategoryFilter({ active, onChange }: Props) {
         onClick={() => onChange('全部')}
         className={`flower-pill shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
           active === '全部'
-            ? 'bg-[#3d362e] text-white'
-            : 'text-[#6d6156] hover:bg-white'
+            ? 'bg-[#251f1a] text-white'
+            : 'text-[#65584d] hover:bg-white'
         }`}
       >
         全部
@@ -28,8 +28,8 @@ export default function CategoryFilter({ active, onChange }: Props) {
           onClick={() => onChange(cat)}
           className={`flower-pill shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
             active === cat
-              ? 'bg-[#8a9c84] text-white'
-              : 'text-[#6d6156] hover:bg-white'
+              ? 'bg-[#3f5f47] text-white'
+              : 'text-[#65584d] hover:bg-white'
           }`}
         >
           {cat}

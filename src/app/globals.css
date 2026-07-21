@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3ede7;
-  --foreground: #3d362e;
+  --background: #fbf6ee;
+  --foreground: #251f1a;
 }
 
 @theme inline {
@@ -22,13 +22,10 @@ html {
 
 body {
   min-height: 100vh;
-  /* 莫兰迪底色：灰粉+灰绿+灰紫的柔和渐变 */
   background:
-    radial-gradient(circle at 5% 8%,   rgba(188, 165, 168, .22), transparent 30rem),
-    radial-gradient(circle at 92% 12%,  rgba(162, 175, 160, .24), transparent 28rem),
-    radial-gradient(circle at 50% 70%,  rgba(178, 168, 180, .18), transparent 34rem),
-    radial-gradient(circle at 15% 85%,  rgba(196, 172, 160, .2),  transparent 22rem),
-    linear-gradient(175deg, #f5f0e9 0%, #efe7db 42%, #e7ddd0 100%);
+    radial-gradient(circle at 8% 10%, rgba(190, 91, 96, 0.11), transparent 24rem),
+    radial-gradient(circle at 88% 16%, rgba(118, 143, 96, 0.14), transparent 26rem),
+    linear-gradient(180deg, #fffaf4 0%, #f7eee2 46%, #f2e7d8 100%);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -53,8 +50,8 @@ img {
 }
 
 ::selection {
-  background: #c9b5ab;
-  color: #3d362e;
+  background: #d9b79a;
+  color: #251f1a;
 }
 
 .line-clamp-2 {
@@ -64,9 +61,6 @@ img {
   overflow: hidden;
 }
 
-/* ──────────────────────────────────
-   鲜花铺满 — 装饰层
-   ────────────────────────────────── */
 .floral-page {
   position: relative;
   overflow: hidden;
@@ -77,105 +71,42 @@ img {
   content: "";
   position: fixed;
   z-index: -1;
+  width: 28rem;
+  height: 28rem;
   pointer-events: none;
-  opacity: .28;
-  filter: blur(.4px);
-}
-
-/* 左上角：大团莫兰迪花簇 */
-.floral-page::before {
-  left: -8rem;
-  top: 6rem;
-  width: 36rem;
-  height: 36rem;
   background-image:
-    /* 灰粉花瓣 — 莫兰迪玫瑰 */
-    radial-gradient(ellipse at 22% 18%, rgba(193, 163, 167, .48) 0 7%, transparent 8%),
-    radial-gradient(ellipse at 38% 26%, rgba(200, 170, 172, .44) 0 6%, transparent 7%),
-    radial-gradient(ellipse at 18% 36%, rgba(188, 158, 162, .42) 0 8%, transparent 9%),
-    radial-gradient(ellipse at 28% 42%, rgba(195, 168, 170, .38) 0 5%, transparent 6%),
-    /* 灰绿花叶 — 莫兰迪鼠尾草绿 */
-    radial-gradient(ellipse at 58% 22%, rgba(165, 178, 162, .42) 0 7%, transparent 8%),
-    radial-gradient(ellipse at 72% 34%, rgba(158, 170, 155, .38) 0 6%, transparent 7%),
-    radial-gradient(ellipse at 48% 52%, rgba(170, 180, 165, .36) 0 8%, transparent 9%),
-    /* 灰紫小花 — 莫兰迪薰衣草 */
-    radial-gradient(ellipse at 10% 54%, rgba(178, 170, 182, .44) 0 6%, transparent 7%),
-    radial-gradient(ellipse at 34% 62%, rgba(182, 174, 185, .4) 0 5%, transparent 6%),
-    radial-gradient(ellipse at 56% 70%, rgba(176, 167, 179, .38) 0 7%, transparent 8%),
-    /* 灰蓝点缀 — 莫兰迪雾蓝 */
-    radial-gradient(ellipse at 78% 58%, rgba(166, 172, 184, .36) 0 6%, transparent 7%),
-    /* 花茎线条 */
-    linear-gradient(142deg, transparent 44%, rgba(155, 170, 150, .32) 45% 46%, transparent 47%),
-    linear-gradient(155deg, transparent 52%, rgba(155, 170, 150, .28) 53% 55%, transparent 56%);
-  background-size:
-    9rem 9rem, 8rem 8rem, 10rem 10rem, 7rem 7rem,
-    10rem 10rem, 8rem 8rem, 9rem 9rem,
-    8rem 8rem, 7rem 7rem, 9rem 9rem,
-    8rem 8rem,
-    13rem 13rem, 11rem 11rem;
-  transform: rotate(-8deg);
-}
-
-/* 右下角：散落花瓣 */
-.floral-page::after {
-  right: -10rem;
-  bottom: 2rem;
-  width: 30rem;
-  height: 30rem;
-  background-image:
-    /* 灰粉 */
-    radial-gradient(ellipse at 80% 72%, rgba(193, 163, 167, .44) 0 7%, transparent 8%),
-    radial-gradient(ellipse at 68% 84%, rgba(200, 170, 172, .4) 0 6%, transparent 7%),
-    radial-gradient(ellipse at 88% 62%, rgba(188, 158, 162, .38) 0 5%, transparent 6%),
-    /* 灰绿 */
-    radial-gradient(ellipse at 42% 76%, rgba(165, 178, 162, .4) 0 7%, transparent 8%),
-    radial-gradient(ellipse at 55% 88%, rgba(158, 170, 155, .36) 0 6%, transparent 7%),
-    /* 灰紫 */
-    radial-gradient(ellipse at 72% 58%, rgba(178, 170, 182, .42) 0 6%, transparent 7%),
-    radial-gradient(ellipse at 58% 68%, rgba(182, 174, 185, .38) 0 5%, transparent 6%),
-    /* 灰蓝 */
-    radial-gradient(ellipse at 28% 62%, rgba(166, 172, 184, .34) 0 6%, transparent 7%),
-    /* 花茎 */
-    linear-gradient(30deg, transparent 48%, rgba(155, 170, 150, .26) 49% 51%, transparent 52%);
-  background-size:
-    8rem 8rem, 7rem 7rem, 6rem 6rem,
-    9rem 9rem, 7rem 7rem,
-    8rem 8rem, 6rem 6rem,
-    7rem 7rem,
-    12rem 12rem;
-  transform: rotate(10deg);
-}
-
-/* 花瓣飘落动画（页面底部隐约浮动） */
-@keyframes petal-float {
-  0%   { transform: translateY(0) rotate(0deg); opacity: .18; }
-  50%  { transform: translateY(-18px) rotate(5deg); opacity: .28; }
-  100% { transform: translateY(0) rotate(0deg); opacity: .18; }
+    radial-gradient(ellipse at 50% 24%, rgba(196, 89, 106, .28) 0 9%, transparent 10%),
+    radial-gradient(ellipse at 76% 50%, rgba(210, 108, 111, .22) 0 9%, transparent 10%),
+    radial-gradient(ellipse at 50% 76%, rgba(196, 89, 106, .22) 0 9%, transparent 10%),
+    radial-gradient(ellipse at 24% 50%, rgba(210, 108, 111, .2) 0 9%, transparent 10%),
+    linear-gradient(145deg, transparent 50%, rgba(111, 139, 87, .32) 51% 53%, transparent 54%);
+  background-size: 9rem 9rem, 9rem 9rem, 9rem 9rem, 9rem 9rem, 11rem 11rem;
+  opacity: .32;
+  filter: blur(.1px);
 }
 
 .floral-page::before {
-  animation: petal-float 12s ease-in-out infinite;
-}
-.floral-page::after {
-  animation: petal-float 14s ease-in-out 3s infinite;
+  left: -10rem;
+  top: 10rem;
+  transform: rotate(-12deg);
 }
 
-/* ──────────────────────────────────
-   纸质卡片 — 莫兰迪米白
-   ────────────────────────────────── */
+.floral-page::after {
+  right: -12rem;
+  bottom: 4rem;
+  transform: rotate(16deg);
+}
+
 .pressed-paper {
-  border: 1px solid rgba(158, 144, 130, .16);
+  border: 1px solid rgba(132, 103, 75, .14);
   background:
-    linear-gradient(140deg, rgba(248, 244, 238, .94), rgba(240, 233, 223, .78)),
-    repeating-linear-gradient(90deg, rgba(138, 126, 112, .03) 0 1px, transparent 1px 9px);
-  box-shadow: 0 20px 56px rgba(120, 105, 88, .09);
+    linear-gradient(135deg, rgba(255, 255, 255, .92), rgba(255, 250, 242, .76)),
+    repeating-linear-gradient(90deg, rgba(117, 94, 72, .035) 0 1px, transparent 1px 9px);
+  box-shadow: 0 22px 60px rgba(92, 71, 55, .10);
 }
 
-/* ──────────────────────────────────
-   药丸标签
-   ────────────────────────────────── */
 .flower-pill {
-  border: 1px solid rgba(158, 144, 130, .22);
-  background: rgba(248, 244, 238, .7);
-  box-shadow: inset 0 1px 0 rgba(255, 253, 250, .6);
+  border: 1px solid rgba(157, 127, 94, .24);
+  background: rgba(255, 255, 255, .68);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7);
 }

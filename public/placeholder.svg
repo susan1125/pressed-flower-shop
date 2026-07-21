@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="押花小铺花材占位图">
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="沁瓣花材占位图">
   <defs>
     <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#fffdf7"/>
@@ -46,6 +46,6 @@
     </g>
   </g>
 
-  <text x="450" y="820" text-anchor="middle" fill="#6f5a49" font-family="Arial, sans-serif" font-size="30" font-weight="700">押花小铺</text>
+  <text x="450" y="820" text-anchor="middle" fill="#6f5a49" font-family="Arial, sans-serif" font-size="34" font-weight="700">沁瓣</text>
   <text x="450" y="858" text-anchor="middle" fill="#9a8472" font-family="Arial, sans-serif" font-size="18">真实花材 · 手作留存</text>
 </svg>
