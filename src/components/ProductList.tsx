@@ -17,12 +17,12 @@ export default function ProductList({ products }: { products: Product[] }) {
       <CategoryFilter active={activeCategory} onChange={setActiveCategory} />
 
       {filtered.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-gray-400 text-lg">暂无产品</p>
-          <p className="text-gray-300 mt-2">敬请期待更多手工压花作品</p>
+        <div className="pressed-paper rounded-3xl py-20 text-center">
+          <p className="text-lg font-semibold text-[#3b332d]">暂无作品</p>
+          <p className="mt-2 text-sm text-[#8d8176]">敬请期待更多手工压花作品。</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
           {filtered.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

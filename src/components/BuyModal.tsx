@@ -1,8 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useMemo } from 'react';
 import { Product } from '@/types';
-import regions, { type Region } from '@/data/regions';
+import regions from '@/data/regions';
 
 interface Props {
   product: Product;
@@ -10,16 +11,8 @@ interface Props {
   onSuccess: () => void;
 }
 
-function findRegion(value: string): Region | undefined {
-  for (const p of regions) {
-    if (p.value === value) return p;
-    if (p.children) {
-      for (const c of p.children) {
-        if (c.value === value) return c;
-      }
-    }
-  }
-}
+const inputClass = "w-full rounded-2xl border border-[#ded0bd] bg-[#fffaf4] px-3 py-2.5 text-sm text-[#2f271f] outline-none transition-colors focus:border-[#9a6d64] focus:bg-white";
+const labelClass = "mb-1 block text-sm font-medium text-[#6f6257]";
 
 export default function BuyModal({ product, onClose, onSuccess }: Props) {
   const min = product.minOrder || 1;
@@ -100,51 +93,57 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 bg-white border-b px-5 py-4 flex items-center justify-between rounded-t-2xl z-10">
-          <h2 className="font-bold text-lg">购买 {product.name}</h2>
-          <button onClick={onClose} className="text-gray-300 hover:text-gray-500 text-xl leading-none">&times;</button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#211812]/45 p-4 backdrop-blur-sm" onClick={onClose}>
+      <div className="pressed-paper max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[26px]" onClick={(e) => e.stopPropagation()}>
+        <div className="sticky top-0 z-10 border-b border-[#dfd0bb] bg-[#fffaf4]/92 px-5 py-4 backdrop-blur">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold tracking-[0.18em] text-[#b85c62]">ORDER</p>
+              <h2 className="mt-1 text-lg font-semibold text-[#2f271f]">购买 {product.name}</h2>
+            </div>
+            <button onClick={onClose} className="rounded-full border border-[#dfd0bb] bg-white/60 px-3 py-1 text-xl leading-none text-[#8a7a6a] hover:bg-white">&times;</button>
+          </div>
         </div>
 
         <div className="p-5">
-          {/* ─── Step 1: Info form ─── */}
           {step === 'form' && (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Qty & Price */}
-              <div className="flex items-center justify-between bg-gray-50 rounded-xl p-3">
-                <span className="text-sm text-gray-500">数量{min > 1 ? `（${min}份起购）` : ''}</span>
-                <div className="flex items-center gap-3">
-                  <button type="button" onClick={() => setQty(Math.max(min, qty - 1))} className="w-7 h-7 rounded-full border flex items-center justify-center text-gray-500">−</button>
-                  <span className="w-6 text-center font-medium">{qty}</span>
-                  <button type="button" onClick={() => setQty(Math.min(product.stock, qty + 1))} className="w-7 h-7 rounded-full border flex items-center justify-center text-gray-500">+</button>
+              <div className="flex gap-3 rounded-3xl border border-[#eadbc8] bg-white/58 p-3">
+                <Image src={product.images[0] || '/placeholder.svg'} alt={product.name} width={80} height={80} className="h-20 w-20 rounded-2xl object-cover" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-semibold text-[#2f271f]">{product.name}</p>
+                  <p className="mt-1 text-sm text-[#817469]">库存 {product.stock} · {min > 1 ? `${min}份起购` : '单件可购'}</p>
+                  <p className="mt-2 text-xl font-semibold text-[#b85c62]">¥{total}</p>
                 </div>
               </div>
-              <div className="text-right">
-                <span className="text-sm text-gray-400">合计 </span>
-                <span className="text-xl font-bold text-rose-600">¥{total}</span>
+
+              <div className="flex items-center justify-between rounded-3xl bg-[#efe2d0]/70 p-3">
+                <span className="text-sm text-[#6f6257]">数量{min > 1 ? `（${min}份起购）` : ''}</span>
+                <div className="flex items-center gap-3">
+                  <button type="button" onClick={() => setQty(Math.max(min, qty - 1))} className="flex h-8 w-8 items-center justify-center rounded-full border border-[#cfbda5] bg-white text-[#6f6257]">−</button>
+                  <span className="w-7 text-center font-semibold text-[#2f271f]">{qty}</span>
+                  <button type="button" onClick={() => setQty(Math.min(product.stock, qty + 1))} className="flex h-8 w-8 items-center justify-center rounded-full border border-[#cfbda5] bg-white text-[#6f6257]">+</button>
+                </div>
               </div>
 
-              {/* Name & Phone */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm text-gray-500 mb-1">收件人 *</label>
-                  <input required value={name} onChange={(e) => setName(e.target.value)} className="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-rose-300" placeholder="姓名" />
+                  <label className={labelClass}>收件人 *</label>
+                  <input required value={name} onChange={(e) => setName(e.target.value)} className={inputClass} placeholder="姓名" />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-500 mb-1">手机号 *</label>
-                  <input required type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-rose-300" placeholder="11位手机号" />
+                  <label className={labelClass}>手机号 *</label>
+                  <input required type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} placeholder="11位手机号" />
                 </div>
               </div>
 
-              {/* Cascading region selectors */}
               <div>
-                <label className="block text-sm text-gray-500 mb-1">所在地区 *</label>
+                <label className={labelClass}>所在地区 *</label>
                 <div className="grid grid-cols-3 gap-2">
                   <select
                     value={province}
                     onChange={(e) => { setProvince(e.target.value); setCity(''); setDistrict(''); }}
-                    className="border rounded-xl px-2 py-2.5 text-sm focus:outline-none focus:border-rose-300 bg-white"
+                    className={inputClass}
                   >
                     <option value="">省/直辖市</option>
                     {regions.map((r) => (
@@ -156,7 +155,7 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
                     value={city}
                     onChange={(e) => { setCity(e.target.value); setDistrict(''); }}
                     disabled={cities.length === 0}
-                    className="border rounded-xl px-2 py-2.5 text-sm focus:outline-none focus:border-rose-300 bg-white disabled:bg-gray-100 disabled:text-gray-400"
+                    className={`${inputClass} disabled:bg-[#eee6dc] disabled:text-[#a29486]`}
                   >
                     <option value="">市</option>
                     {cities.map((r) => (
@@ -168,7 +167,7 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
                     <select
                       value={district}
                       onChange={(e) => setDistrict(e.target.value)}
-                      className="border rounded-xl px-2 py-2.5 text-sm focus:outline-none focus:border-rose-300 bg-white"
+                      className={inputClass}
                     >
                       <option value="">区/县</option>
                       {districts.map((r) => (
@@ -179,79 +178,74 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
                     <input
                       value={district}
                       onChange={(e) => setDistrict(e.target.value)}
-                      className="border rounded-xl px-2 py-2.5 text-sm focus:outline-none focus:border-rose-300 bg-white"
+                      className={inputClass}
                       placeholder="区/县"
                     />
                   )}
                 </div>
               </div>
 
-              {/* Detail address */}
               <div>
-                <label className="block text-sm text-gray-500 mb-1">详细地址 *</label>
+                <label className={labelClass}>详细地址 *</label>
                 <textarea
                   required
                   value={detail}
                   onChange={(e) => setDetail(e.target.value)}
                   onPaste={handlePaste}
                   rows={2}
-                  className="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-rose-300 resize-none"
+                  className={`${inputClass} resize-none`}
                   placeholder="街道/小区/门牌号，可直接粘贴整段地址"
                 />
                 {fullAddress && (
-                  <p className="mt-1 text-xs text-gray-400 truncate">📍 {fullAddress}</p>
+                  <p className="mt-1 truncate text-xs text-[#9a8b7e]">地址预览：{fullAddress}</p>
                 )}
               </div>
 
-              {/* Note */}
               <div>
-                <label className="block text-sm text-gray-500 mb-1">备注（选填）</label>
-                <input value={note} onChange={(e) => setNote(e.target.value)} className="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-rose-300" placeholder="颜色偏好、特殊要求等" />
+                <label className={labelClass}>备注（选填）</label>
+                <input value={note} onChange={(e) => setNote(e.target.value)} className={inputClass} placeholder="颜色偏好、特殊要求等" />
               </div>
 
-              <button type="submit" className="w-full bg-rose-500 text-white py-3 rounded-full font-medium hover:bg-rose-600">
+              <button type="submit" className="w-full rounded-full bg-[#251f1a] py-3 font-semibold text-white transition-colors hover:bg-[#3b312a]">
                 下一步：付款 ¥{total}
               </button>
             </form>
           )}
 
-          {/* ─── Step 2: Payment ─── */}
           {step === 'pay' && (
             <div className="space-y-4 text-center">
-              <p className="text-gray-500 text-sm">请扫码付款</p>
-              <p className="text-3xl font-bold text-rose-600">¥{total}</p>
+              <p className="text-sm font-medium text-[#6f6257]">请扫码付款</p>
+              <p className="text-4xl font-semibold text-[#b85c62]">¥{total}</p>
 
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm font-medium text-green-600 mb-2">💚 微信支付</p>
-                  <img src="/api/uploads/wechat-pay.jpg" alt="微信收款码" className="w-40 h-40 mx-auto rounded-xl object-contain shadow-sm" />
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-3xl border border-[#dfd0bb] bg-white/62 p-3">
+                  <p className="mb-2 text-sm font-semibold text-[#3f7a4f]">微信支付</p>
+                  <Image src="/api/uploads/wechat-pay.jpg" alt="微信收款码" width={144} height={144} className="mx-auto h-36 w-36 rounded-2xl object-contain shadow-sm" />
                 </div>
-                <div className="border-t pt-4">
-                  <p className="text-sm font-medium text-blue-600 mb-2">💙 支付宝</p>
-                  <img src="/api/uploads/alipay.jpg" alt="支付宝收款码" className="w-40 h-40 mx-auto rounded-xl object-contain shadow-sm" />
+                <div className="rounded-3xl border border-[#dfd0bb] bg-white/62 p-3">
+                  <p className="mb-2 text-sm font-semibold text-[#3d6f9f]">支付宝</p>
+                  <Image src="/api/uploads/alipay.jpg" alt="支付宝收款码" width={144} height={144} className="mx-auto h-36 w-36 rounded-2xl object-contain shadow-sm" />
                 </div>
               </div>
 
-              <p className="text-xs text-gray-400">付款时请备注「{name}」</p>
+              <p className="text-xs text-[#9a8b7e]">付款时请备注「{name}」</p>
 
               <button
                 onClick={handlePaid}
                 disabled={submitting}
-                className="w-full bg-green-500 text-white py-3 rounded-full font-medium hover:bg-green-600 disabled:opacity-50"
+                className="w-full rounded-full bg-[#3f5f47] py-3 font-semibold text-white transition-colors hover:bg-[#334e3a] disabled:opacity-50"
               >
-                {submitting ? '处理中...' : '✅ 我已完成付款'}
+                {submitting ? '处理中...' : '我已完成付款'}
               </button>
-              <button onClick={() => setStep('form')} className="text-sm text-gray-400 hover:text-gray-600">← 返回修改信息</button>
+              <button onClick={() => setStep('form')} className="text-sm text-[#8a7a6a] hover:text-[#2f271f]">返回修改信息</button>
             </div>
           )}
 
-          {/* ─── Step 3: Done ─── */}
           {step === 'done' && (
-            <div className="text-center py-6 space-y-3">
-              <p className="text-4xl">✅</p>
-              <p className="text-lg font-bold text-gray-900">下单成功！</p>
-              <p className="text-sm text-gray-500">库存已自动更新</p>
-              <p className="text-sm text-gray-400">做好后按地址发货即可</p>
+            <div className="py-8 text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#3f5f47] text-white">✓</div>
+              <p className="text-lg font-semibold text-[#2f271f]">下单成功</p>
+              <p className="mt-2 text-sm text-[#75685c]">库存已自动更新，做好后按地址发货即可。</p>
             </div>
           )}
         </div>
