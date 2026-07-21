@@ -32,3 +32,13 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return Response.json(read());
 }
+
+export async function PUT(request: NextRequest) {
+  const { id, status } = await request.json();
+  const orders = read();
+  const idx = orders.findIndex((o: any) => o.id === id);
+  if (idx === -1) return Response.json({ error: 'Not found' }, { status: 404 });
+  orders[idx].status = status;
+  write(orders);
+  return Response.json(orders[idx]);
+}

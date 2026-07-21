@@ -48,21 +48,50 @@ export default function AdminPage() {
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-semibold text-[#2c251f]">产品管理</h1>
-          <Link href="/" className="rounded-full border border-[#dcc9b1] bg-white/70 px-3 py-1 text-xs text-[#8a7a6a]">
+          <h1 className="text-2xl font-semibold text-[#2c251f]">管理后台</h1>
+          <Link href="/" className="rounded-full border border-[#cbc0b2] bg-white/70 px-3 py-1 text-xs text-[#8a7d6e]">
             ← 回到店铺
           </Link>
         </div>
         <button
           onClick={() => { localStorage.removeItem('admin_auth'); setLoggedIn(false); }}
-          className="text-sm text-[#8a7a6a] hover:text-[#b85c62]"
+          className="text-sm text-[#8a7d6e] hover:text-[#a8898b]"
         >
           退出
         </button>
       </div>
 
-      <ProductManager />
+      <TabManager />
     </div>
+  );
+}
+
+type Tab = 'products' | 'orders';
+
+function TabManager() {
+  const [tab, setTab] = useState<Tab>('products');
+
+  return (
+    <>
+      <div className="mb-6 flex gap-2">
+        {([
+          ['products', '📦 产品管理'],
+          ['orders', '📋 订单地址'],
+        ] as [Tab, string][]).map(([key, label]) => (
+          <button
+            key={key}
+            onClick={() => setTab(key)}
+            className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+              tab === key ? 'bg-[#3d362e] text-white' : 'flower-pill text-[#6d6156]'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'products' ? <ProductManager /> : <OrderManager />}
+    </>
   );
 }
 
@@ -295,6 +324,113 @@ function ProductManager() {
           </tbody>
         </table>
       </div>
+    </>
+  );
+}
+
+// ════════════════════════════════════════
+// ORDER MANAGER — 查看订单 & 导出地址
+// ════════════════════════════════════════
+function OrderManager() {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { fetchOrders(); }, []);
+
+  async function fetchOrders() {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/orders', { cache: 'no-store' });
+      const data = await res.json();
+      setOrders(Array.isArray(data) ? data.reverse() : []);
+    } catch { setOrders([]); }
+    setLoading(false);
+  }
+
+  function exportCSV() {
+    const header = '序号,订单号,下单时间,收件人,手机号,地址,商品,数量,金额,备注,状态\n';
+    const rows = orders.map((o, i) => {
+      const items = o.items?.map((it: any) => `${it.product?.name || '?'}×${it.quantity}`).join('; ') || '';
+      return [
+        i + 1, o.id, new Date(o.createdAt).toLocaleString('zh-CN'),
+        o.customer?.name || '', o.customer?.phone || '', o.customer?.address || '',
+        items, '', o.total, o.customer?.note || '',
+        o.status === 'paid' ? '已付款' : o.status === 'shipped' ? '已发货' : '待付款',
+      ].join(',');
+    }).join('\n');
+
+    const BOM = '﻿';
+    const blob = new Blob([BOM + header + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `订单地址_${new Date().toLocaleDateString('zh-CN').replace(/\//g, '-')}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function toggleStatus(order: any) {
+    const next = order.status === 'pending' ? 'paid' : order.status === 'paid' ? 'shipped' : 'pending';
+    await fetch('/api/orders', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: order.id, status: next }),
+    });
+    fetchOrders();
+  }
+
+  const statusLabel = (s: string) => s === 'paid' ? '已付款' : s === 'shipped' ? '已发货' : '待付款';
+  const statusColor = (s: string) =>
+    s === 'paid' ? 'bg-green-50 text-green-700' :
+    s === 'shipped' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700';
+
+  return (
+    <>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-[#2f271f]">订单记录（{orders.length}条）</h2>
+        <button onClick={exportCSV} disabled={orders.length === 0} className="rounded-full bg-[#8a9c84] px-5 py-2 text-sm font-semibold text-white hover:bg-[#7a8d74] disabled:opacity-40">
+          ⬇ 导出地址 CSV
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="py-10 text-center text-[#8d8176]">加载中...</div>
+      ) : orders.length === 0 ? (
+        <div className="pressed-paper rounded-3xl px-6 py-16 text-center"><p className="text-[#8d8176]">还没有订单</p></div>
+      ) : (
+        <div className="pressed-paper overflow-hidden rounded-[28px]">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[#eadbc8] bg-white/50 text-[#8a7a6a]">
+                <th className="px-4 py-3 text-left">收件人</th>
+                <th className="px-4 py-3 text-left">手机号</th>
+                <th className="px-4 py-3 text-left">地址</th>
+                <th className="px-4 py-3 text-left">商品</th>
+                <th className="px-4 py-3 text-right">金额</th>
+                <th className="px-4 py-3 text-center">状态</th>
+                <th className="px-4 py-3 text-center">时间</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((o) => (
+                <tr key={o.id} className="border-b border-[#efe2d0] last:border-0 hover:bg-white/50">
+                  <td className="px-4 py-3 font-medium text-[#2f271f]">{o.customer?.name}</td>
+                  <td className="px-4 py-3 text-[#6d6156]">{o.customer?.phone}</td>
+                  <td className="max-w-[14rem] truncate px-4 py-3 text-[#6d6156]" title={o.customer?.address}>{o.customer?.address}</td>
+                  <td className="px-4 py-3 text-[#6d6156]">{o.items?.map((it: any) => `${it.product?.name}×${it.quantity}`).join(', ')}</td>
+                  <td className="px-4 py-3 text-right font-medium text-[#2f271f]">¥{o.total}</td>
+                  <td className="px-4 py-3 text-center">
+                    <button onClick={() => toggleStatus(o)} className={`rounded-full px-3 py-1 text-xs font-medium ${statusColor(o.status)}`}>
+                      {statusLabel(o.status)}
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 text-center text-xs text-[#a29486]">{new Date(o.createdAt).toLocaleDateString('zh-CN')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 }
