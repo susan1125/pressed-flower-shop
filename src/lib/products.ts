@@ -1,48 +1,22 @@
 import { Product } from '@/types';
 import productsData from '@/data/products.json';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import path from 'path';
+import { storageRead, storageWrite } from './storage';
 
-const DATA_FILE = path.join(process.cwd(), 'data', 'products.json');
+const KEY = 'products';
 
-function ensureDataDir() {
-  const dir = path.dirname(DATA_FILE);
-  if (!existsSync(dir)) {
-    mkdirSync(dir, { recursive: true });
-  }
+async function readProducts(): Promise<Product[]> {
+  return storageRead<Product[]>(KEY, [...(productsData as Product[])]);
 }
 
-function ensureDataFile() {
-  ensureDataDir();
-  if (!existsSync(DATA_FILE)) {
-    // First-time init: copy template data
-    writeFileSync(DATA_FILE, JSON.stringify(productsData, null, 2), 'utf-8');
-  }
-  // NEVER overwrite — runtime data is the source of truth
+async function writeProducts(products: Product[]) {
+  await storageWrite(KEY, products);
 }
 
-// Always read fresh from disk
-function readProducts(): Product[] {
-  ensureDataFile();
-  try {
-    const raw = readFileSync(DATA_FILE, 'utf-8');
-    return JSON.parse(raw) as Product[];
-  } catch {
-    return [...(productsData as Product[])];
-  }
-}
-
-function writeProducts(products: Product[]) {
-  ensureDataDir();
-  writeFileSync(DATA_FILE, JSON.stringify(products, null, 2), 'utf-8');
-}
-
-export function getProducts(category?: string): Product[] {
-  const all = readProducts();
+export async function getProducts(category?: string): Promise<Product[]> {
+  const all = await readProducts();
   const filtered = category
     ? all.filter((p) => p.category === category)
     : all;
-  // Sort: in-stock first, sold out last
   return filtered.sort((a, b) => {
     if (a.stock > 0 && b.stock === 0) return -1;
     if (a.stock === 0 && b.stock > 0) return 1;
@@ -50,40 +24,40 @@ export function getProducts(category?: string): Product[] {
   });
 }
 
-export function getProduct(id: string): Product | undefined {
-  return readProducts().find((p) => p.id === id);
+export async function getProduct(id: string): Promise<Product | undefined> {
+  return (await readProducts()).find((p) => p.id === id);
 }
 
-export function addProduct(product: Omit<Product, 'id' | 'createdAt'>): Product {
-  const products = readProducts();
+export async function addProduct(product: Omit<Product, 'id' | 'createdAt'>): Promise<Product> {
+  const products = await readProducts();
   const newProduct: Product = {
     ...product,
     id: Date.now().toString(),
     createdAt: new Date().toISOString(),
   };
   products.push(newProduct);
-  writeProducts(products);
+  await writeProducts(products);
   return newProduct;
 }
 
-export function updateProduct(id: string, data: Partial<Product>): Product | null {
-  const products = readProducts();
+export async function updateProduct(id: string, data: Partial<Product>): Promise<Product | null> {
+  const products = await readProducts();
   const index = products.findIndex((p) => p.id === id);
   if (index === -1) return null;
   products[index] = { ...products[index], ...data };
-  writeProducts(products);
+  await writeProducts(products);
   return products[index];
 }
 
-export function deleteProduct(id: string): boolean {
-  const products = readProducts();
+export async function deleteProduct(id: string): Promise<boolean> {
+  const products = await readProducts();
   const index = products.findIndex((p) => p.id === id);
   if (index === -1) return false;
   products.splice(index, 1);
-  writeProducts(products);
+  await writeProducts(products);
   return true;
 }
 
-export function getAllProducts(): Product[] {
+export async function getAllProducts(): Promise<Product[]> {
   return readProducts();
 }
