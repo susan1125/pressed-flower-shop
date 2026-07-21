@@ -356,6 +356,8 @@ function ProductManager() {
 function OrderManager() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
 
   useEffect(() => { fetchOrders(); }, []);
 
@@ -369,9 +371,31 @@ function OrderManager() {
     setLoading(false);
   }
 
+  // 按日期筛选
+  const filteredOrders = orders.filter((o) => {
+    const orderDate = new Date(o.createdAt).toISOString().slice(0, 10);
+    if (dateFrom && orderDate < dateFrom) return false;
+    if (dateTo && orderDate > dateTo) return false;
+    return true;
+  });
+
+  // 今日快捷筛选
+  function filterToday() {
+    const today = new Date().toISOString().slice(0, 10);
+    setDateFrom(today);
+    setDateTo(today);
+  }
+
+  function clearFilter() {
+    setDateFrom('');
+    setDateTo('');
+  }
+
   function exportCSV() {
+    const list = filteredOrders.length > 0 ? filteredOrders : orders;
+    const dateLabel = dateFrom ? `${dateFrom}至${dateTo || '今天'}` : '全部';
     const header = '序号,订单号,下单时间,收件人,手机号,地址,商品,金额,备注,状态\n';
-    const rows = orders.map((o, i) => {
+    const rows = list.map((o, i) => {
       const items = o.items?.map((it: any) => `${it.product?.name || '?'}×${it.quantity}`).join('; ') || '';
       return [
         i + 1, o.id, new Date(o.createdAt).toLocaleString('zh-CN'),
@@ -386,7 +410,7 @@ function OrderManager() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `订单地址_${new Date().toLocaleDateString('zh-CN').replace(/\//g, '-')}.csv`;
+    a.download = `订单地址_${dateLabel}_${new Date().toLocaleDateString('zh-CN').replace(/\//g, '-')}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -405,20 +429,31 @@ function OrderManager() {
 
   return (
     <>
-      <div className="meadow-panel mb-4 flex items-center justify-between rounded-[24px] p-4 text-white">
+      <div className="meadow-panel mb-4 flex flex-col gap-3 rounded-[24px] p-4 text-white sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-[#f4ddc8]">ORDERS</p>
-          <h2 className="mt-1 text-lg font-semibold">订单记录（{orders.length}条）</h2>
+          <h2 className="mt-1 text-lg font-semibold">订单记录（{filteredOrders.length}条{dateFrom ? '，已筛选' : ''}）</h2>
         </div>
-        <button onClick={exportCSV} disabled={orders.length === 0} className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#263325] shadow-sm transition-transform hover:-translate-y-0.5 disabled:opacity-40">
-          ⬇ 导出地址 CSV
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button onClick={filterToday} className="rounded-full border border-white/40 bg-white/14 px-3 py-1.5 text-xs text-white backdrop-blur hover:bg-white/24">今天</button>
+          <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="rounded-xl border border-white/40 bg-white/18 px-2 py-1.5 text-xs text-white backdrop-blur [color-scheme:dark]" title="开始日期" />
+          <span className="text-xs text-white/60">至</span>
+          <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="rounded-xl border border-white/40 bg-white/18 px-2 py-1.5 text-xs text-white backdrop-blur [color-scheme:dark]" title="结束日期" />
+          {(dateFrom || dateTo) && (
+            <button onClick={clearFilter} className="rounded-full border border-white/40 bg-white/14 px-2 py-1.5 text-xs text-white/70 backdrop-blur hover:bg-white/24">清除</button>
+          )}
+          <button onClick={exportCSV} disabled={orders.length === 0} className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#263325] shadow-sm transition-transform hover:-translate-y-0.5 disabled:opacity-40">
+            ⬇ 导出 CSV
+          </button>
+        </div>
       </div>
 
       {loading ? (
         <div className="py-10 text-center text-[#8d8176]">加载中...</div>
       ) : orders.length === 0 ? (
         <div className="pressed-paper rounded-3xl px-6 py-16 text-center"><p className="text-[#8d8176]">还没有订单</p></div>
+      ) : filteredOrders.length === 0 ? (
+        <div className="pressed-paper rounded-3xl px-6 py-16 text-center"><p className="text-[#8d8176]">该日期范围内无订单</p><button onClick={clearFilter} className="mt-2 text-sm text-[#4b7a59] hover:underline">清除筛选</button></div>
       ) : (
         <div className="pressed-paper overflow-x-auto rounded-[28px]">
           <table className="w-full text-sm">
@@ -434,7 +469,7 @@ function OrderManager() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((o) => (
+              {filteredOrders.map((o) => (
                 <tr key={o.id} className="border-b border-[#e1eadc] last:border-0 hover:bg-white/50">
                   <td className="px-4 py-3 font-medium text-[#2f271f]">{o.customer?.name}</td>
                   <td className="px-4 py-3 text-[#6d6156]">{o.customer?.phone}</td>
@@ -456,6 +491,17 @@ function OrderManager() {
                 </tr>
               ))}
             </tbody>
+            <tfoot>
+              <tr className="border-t-2 border-[#dfe9d8] bg-[#f6f3ed] font-medium">
+                <td className="px-4 py-3 text-[#2f271f]">合计</td>
+                <td className="px-4 py-3" />
+                <td className="px-4 py-3 text-[#2f271f]">{filteredOrders.length} 单</td>
+                <td className="px-4 py-3" />
+                <td className="px-4 py-3 text-right text-[#2f271f]">¥{filteredOrders.reduce((s, o) => s + Number(o.total), 0)}</td>
+                <td className="px-4 py-3" />
+                <td className="px-4 py-3" />
+              </tr>
+            </tfoot>
           </table>
         </div>
       )}
