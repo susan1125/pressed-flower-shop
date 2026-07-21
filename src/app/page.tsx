@@ -81,7 +81,7 @@ export default function HomePage() {
             把春天压进日常里
           </h1>
           <p className="mt-6 max-w-xl text-base leading-8 text-[#6d6258] sm:text-lg">
-            压花小铺制作书签、台灯、团扇、画框与随身小物。每一片花瓣都来自真实花材，经过干燥、排版、封存后成为独一份作品。
+            押花小铺制作书签、台灯、团扇、画框与随身小物。每一片花瓣都来自真实花材，经过干燥、排版、封存后成为独一份作品。
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -123,7 +123,7 @@ export default function HomePage() {
             <div className="relative aspect-[1.18/1] overflow-hidden rounded-[22px] bg-[#e5d9c8]">
               <Image
                 src="/hero-pressed-flower.svg"
-                alt="压花工作台和花材"
+                alt="押花工作台和花材"
                 fill
                 priority
                 className="object-cover"

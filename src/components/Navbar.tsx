@@ -25,7 +25,7 @@ export default function Navbar() {
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#8a9c84] text-base text-white shadow-sm">
             花
           </span>
-          <span className="text-lg font-semibold tracking-wide text-[#3d362e]">压花小铺</span>
+          <span className="text-lg font-semibold tracking-wide text-[#3d362e]">押花小铺</span>
         </Link>
 
         <div className="hidden items-center gap-2 md:flex">
