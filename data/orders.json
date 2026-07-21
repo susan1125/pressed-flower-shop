@@ -1,0 +1,60 @@
+[
+  {
+    "id": "1784602037683",
+    "items": [
+      {
+        "product": {
+          "id": "1",
+          "name": "压花书签（小号）",
+          "category": "书签",
+          "price": 14,
+          "description": "石竹花书签（适合赠予性格鲜明、带点“小傲娇”或神秘气质的朋友或恋人，表达对其独特个性的欣赏）",
+          "images": [
+            "/api/uploads/1784601005913-5y746h.jpg"
+          ],
+          "inStock": true,
+          "createdAt": "2026-07-15T00:00:00.000Z"
+        },
+        "quantity": 1
+      }
+    ],
+    "total": 14,
+    "customer": {
+      "name": "小苏",
+      "phone": "13211793450",
+      "address": "云南省昆明市云南师范大学",
+      "note": "五"
+    },
+    "status": "pending",
+    "createdAt": "2026-07-21T02:47:17.683Z"
+  },
+  {
+    "id": "1784602970624",
+    "items": [
+      {
+        "product": {
+          "id": "1",
+          "name": "压花书签（小号）",
+          "category": "书签",
+          "price": 14,
+          "description": "石竹花书签（适合赠予性格鲜明、带点“小傲娇”或神秘气质的朋友或恋人，表达对其独特个性的欣赏）",
+          "images": [
+            "/api/uploads/1784601005913-5y746h.jpg"
+          ],
+          "inStock": true,
+          "createdAt": "2026-07-15T00:00:00.000Z"
+        },
+        "quantity": 1
+      }
+    ],
+    "total": 14,
+    "customer": {
+      "name": "苏敬单",
+      "phone": "13211793450",
+      "address": "云南省昆明市云南师范大学",
+      "note": "无"
+    },
+    "status": "paid",
+    "createdAt": "2026-07-21T03:02:50.624Z"
+  }
+]
