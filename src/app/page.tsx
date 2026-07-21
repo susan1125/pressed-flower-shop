@@ -48,6 +48,7 @@ export default function HomePage() {
   }, []);
 
   async function loadProducts(category?: string) {
+    setLoading(true);
     try {
       const params = category && category !== '全部'
         ? `?category=${encodeURIComponent(category)}`
@@ -61,6 +62,8 @@ export default function HomePage() {
       setProducts(data);
     } catch {
       setProducts([]);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -70,8 +73,6 @@ export default function HomePage() {
   }
 
   async function handlePurchaseComplete() {
-    // 静默刷新产品数据
-
     try {
       const res = await fetch('/api/products', {
         cache: 'no-store',
@@ -81,26 +82,13 @@ export default function HomePage() {
     } catch {}
   }
 
-  const liveWorks = products
-    .filter((product) => product.images[0] && product.images[0] !== '/placeholder.svg')
-    .slice(0, 6)
-    .map((product) => ({ name: product.name, image: product.images[0] }));
-  const heroWorks = liveWorks.length >= 4 ? liveWorks : fallbackWorks;
-  const totalStock = products.reduce((sum, product) => sum + product.stock, 0);
+  const heroWorks = fallbackWorks;
 
   return (
     <div className="floral-page">
       <section className="relative min-h-[calc(100vh-64px)] overflow-hidden">
-        <Image
-          src="/brand/qinban-meadow.jpg"
-          alt="蓝天湖畔花海"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,29,20,.72),rgba(18,29,20,.34),rgba(255,255,255,.08))]" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#f5efe7] to-transparent" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,29,20,.62),rgba(18,29,20,.28),rgba(255,255,255,.06))]" />
+        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#f4efe6]/90 to-transparent" />
 
         <div className="relative mx-auto grid min-h-[calc(100vh-64px)] max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[0.82fr_1.18fr] lg:px-8 lg:py-14">
           <div className="text-white">
@@ -136,12 +124,12 @@ export default function HomePage() {
 
           <div className="mt-10 grid max-w-lg grid-cols-3 gap-3">
             <div className="rounded-2xl border border-white/24 bg-white/16 p-4 backdrop-blur-md">
-              <p className="text-2xl font-semibold">{products.length || 13}</p>
-              <p className="mt-1 text-xs text-[#f6e9db]">已录入作品</p>
+              <p className="text-2xl font-semibold">真花</p>
+              <p className="mt-1 text-xs text-[#f6e9db]">自然押制</p>
             </div>
             <div className="rounded-2xl border border-white/24 bg-white/16 p-4 backdrop-blur-md">
-              <p className="text-2xl font-semibold">{totalStock || 130}</p>
-              <p className="mt-1 text-xs text-[#f6e9db]">现货库存</p>
+              <p className="text-2xl font-semibold">手作</p>
+              <p className="mt-1 text-xs text-[#f6e9db]">每件不同</p>
             </div>
             <div className="rounded-2xl border border-white/24 bg-white/16 p-4 backdrop-blur-md">
               <p className="text-2xl font-semibold">1:1</p>
@@ -153,7 +141,7 @@ export default function HomePage() {
           <div className="relative">
             <div className="absolute -right-7 -top-8 h-32 w-32 rounded-full border border-white/30 bg-white/18" />
             <div className="absolute -bottom-10 -left-8 h-44 w-44 rounded-full bg-[#e7b4c1]/34 blur-2xl" />
-            <div className="relative overflow-hidden rounded-[30px] border border-white/30 bg-white/22 p-4 shadow-[0_28px_80px_rgba(0,0,0,.22)] backdrop-blur-xl sm:p-5">
+            <div className="meadow-panel relative overflow-hidden rounded-[30px] p-4 sm:p-5">
             <div className="mb-4 flex items-center justify-between px-1">
               <div>
                 <p className="text-sm font-semibold text-white">沁瓣作品橱窗</p>
@@ -169,10 +157,10 @@ export default function HomePage() {
                 <Image src={heroWorks[0].image} alt={heroWorks[0].name} fill priority className="object-cover" sizes="(max-width: 1024px) 58vw, 32vw" />
               </div>
               <div className="relative col-span-5 row-span-5 overflow-hidden rounded-[22px] bg-[#e6dacb] shadow-lg">
-                <Image src={heroWorks[1].image} alt={heroWorks[1].name} fill className="object-cover" sizes="(max-width: 1024px) 42vw, 22vw" />
+                <Image src={heroWorks[1].image} alt={heroWorks[1].name} fill priority className="object-cover" sizes="(max-width: 1024px) 42vw, 22vw" />
               </div>
               <div className="relative col-span-5 row-span-4 overflow-hidden rounded-[22px] bg-[#e6dacb] shadow-lg">
-                <Image src={heroWorks[2].image} alt={heroWorks[2].name} fill className="object-cover" sizes="(max-width: 1024px) 42vw, 22vw" />
+                <Image src={heroWorks[2].image} alt={heroWorks[2].name} fill priority className="object-cover" sizes="(max-width: 1024px) 42vw, 22vw" />
               </div>
               <div className="relative col-span-4 row-span-5 overflow-hidden rounded-[22px] bg-[#e6dacb] shadow-lg">
                 <Image src={heroWorks[3].image} alt={heroWorks[3].name} fill className="object-cover" sizes="(max-width: 1024px) 34vw, 18vw" />
@@ -189,15 +177,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="products" className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+      <section id="products" className="meadow-soft-section px-4 pb-16 pt-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
         <div className="mb-7 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-semibold tracking-[0.22em] text-[#b78d91]">SHOP COLLECTION</p>
-            <h2 className="mt-3 text-3xl font-semibold text-[#312a23] md:text-4xl">
+            <p className="text-sm font-semibold tracking-[0.22em] text-[#f4ddc8]">SHOP COLLECTION</p>
+            <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
               所有现货作品
             </h2>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-[#7d7164]">
+          <p className="max-w-xl text-sm leading-6 text-[#fff3e4]">
             这里展示的是当前店铺作品，售完后同款花材不一定能完全复刻。
           </p>
         </div>
@@ -222,6 +211,7 @@ export default function HomePage() {
             ))}
           </div>
         )}
+        </div>
       </section>
     </div>
   );

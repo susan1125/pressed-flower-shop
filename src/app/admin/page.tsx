@@ -5,11 +5,14 @@ import { useState, useEffect, useRef } from 'react';
 import { Product, Category, CATEGORIES } from '@/types';
 
 export default function AdminPage() {
-  const [loggedIn, setLoggedIn] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('admin_auth') === 'true';
-  });
+  const [authReady, setAuthReady] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    setLoggedIn(localStorage.getItem('admin_auth') === 'true');
+    setAuthReady(true);
+  }, []);
 
   const handleLogin = () => {
     if (password === 'yahua2026') {
@@ -20,22 +23,33 @@ export default function AdminPage() {
     }
   };
 
+  if (!authReady) {
+    return (
+      <div className="floral-page mx-auto flex min-h-[calc(100vh-64px)] max-w-sm items-center px-4 py-20">
+        <div className="meadow-panel w-full rounded-[28px] p-6 text-center text-white">
+          <p className="text-sm font-medium text-[#fff3e4]">正在进入沁瓣后台...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!loggedIn) {
     return (
-      <div className="mx-auto max-w-sm px-4 py-20">
-        <div className="pressed-paper rounded-[28px] p-6">
-          <h1 className="text-center text-2xl font-semibold text-[#2c251f]">管理后台</h1>
+      <div className="floral-page mx-auto flex min-h-[calc(100vh-64px)] max-w-sm items-center px-4 py-20">
+        <div className="meadow-panel w-full rounded-[28px] p-6">
+          <p className="text-center text-sm font-semibold tracking-[0.22em] text-[#f4ddc8]">QINBAN ADMIN</p>
+          <h1 className="mt-3 text-center text-3xl font-semibold text-white">沁瓣管理后台</h1>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-            className="mt-6 w-full rounded-2xl border border-[#ded0bd] bg-[#fffaf4] px-4 py-3 text-sm outline-none focus:border-[#9a6d64]"
+            className="mt-6 w-full rounded-2xl border border-white/45 bg-white/82 px-4 py-3 text-sm text-[#263325] outline-none backdrop-blur focus:border-white"
             placeholder="请输入管理密码"
           />
           <button
             onClick={handleLogin}
-            className="mt-3 w-full rounded-full bg-[#251f1a] py-3 font-semibold text-white"
+            className="mt-3 w-full rounded-full bg-white py-3 font-semibold text-[#263325] shadow-[0_16px_35px_rgba(0,0,0,.18)] transition-transform hover:-translate-y-0.5"
           >
             登录
           </button>
@@ -45,24 +59,58 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="floral-page mx-auto min-h-[calc(100vh-64px)] max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="meadow-panel mb-6 flex flex-col gap-5 rounded-[30px] p-5 text-white sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-semibold text-[#2c251f]">产品管理</h1>
-          <Link href="/" className="rounded-full border border-[#dcc9b1] bg-white/70 px-3 py-1 text-xs text-[#8a7a6a]">
-            ← 回到店铺
+          <div>
+            <p className="text-xs font-semibold tracking-[0.22em] text-[#f4ddc8]">QINBAN STUDIO</p>
+            <h1 className="mt-2 text-2xl font-semibold">沁瓣管理后台</h1>
+          </div>
+          <Link href="/" className="rounded-full border border-white/45 bg-white/18 px-3 py-1 text-xs text-white backdrop-blur transition-colors hover:bg-white/28">
+            回到店铺
           </Link>
         </div>
         <button
           onClick={() => { localStorage.removeItem('admin_auth'); setLoggedIn(false); }}
-          className="text-sm text-[#8a7a6a] hover:text-[#b85c62]"
+          className="self-start rounded-full border border-white/35 bg-white/14 px-4 py-2 text-sm text-white backdrop-blur transition-colors hover:bg-white/24 sm:self-auto"
         >
           退出
         </button>
       </div>
 
-      <ProductManager />
+      <TabManager />
     </div>
+  );
+}
+
+type Tab = 'products' | 'orders';
+
+function TabManager() {
+  const [tab, setTab] = useState<Tab>('products');
+
+  return (
+    <>
+      <div className="mb-6 flex gap-2">
+        {([
+          ['products', '📦 产品管理'],
+          ['orders', '📋 订单地址'],
+        ] as [Tab, string][]).map(([key, label]) => (
+          <button
+            key={key}
+            onClick={() => setTab(key)}
+            className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+              tab === key
+                ? 'bg-white text-[#263325] shadow-sm'
+                : 'meadow-panel text-white/80 hover:text-white'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'products' ? <ProductManager /> : <OrderManager />}
+    </>
   );
 }
 
@@ -165,13 +213,16 @@ function ProductManager() {
 
   return (
     <>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-[#2f271f]">产品列表（{products.length}件）</h2>
+      <div className="meadow-panel mb-4 flex items-center justify-between rounded-[24px] p-4 text-white">
+        <div>
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#f4ddc8]">WORKS</p>
+          <h2 className="mt-1 text-lg font-semibold">产品列表（{products.length}件）</h2>
+        </div>
         <button
           onClick={() => { setEditing(null); setImageUrl(''); setShowForm(true); }}
-          className="rounded-full bg-[#251f1a] px-4 py-2 text-sm font-semibold text-white"
+          className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#263325] shadow-sm transition-transform hover:-translate-y-0.5"
         >
-          + 添加产品
+          添加产品
         </button>
       </div>
 
@@ -209,7 +260,7 @@ function ProductManager() {
                 onDragLeave={() => setDragOver(false)}
                 onDrop={(e) => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) uploadImage(f); }}
                 onClick={() => fileInputRef.current?.click()}
-                className={`rounded-[22px] border-2 border-dashed p-6 text-center transition-colors ${dragOver ? 'border-[#b85c62] bg-[#faf0ec]' : 'border-[#d7c4ac] bg-[#fffaf4]'} ${uploading ? 'pointer-events-none opacity-50' : ''}`}
+                className={`rounded-[22px] border-2 border-dashed p-6 text-center transition-colors ${dragOver ? 'border-[#b85c62] bg-white/82' : 'border-white/52 bg-white/48'} ${uploading ? 'pointer-events-none opacity-50' : ''}`}
               >
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f); }} className="hidden" />
                 {uploading ? (<div className="text-[#8a7a6a]"><p className="text-lg">⏳</p><p className="text-sm">上传中...</p></div>)
@@ -258,10 +309,10 @@ function ProductManager() {
         </div>
       )}
 
-      <div className="pressed-paper overflow-hidden rounded-[28px]">
+      <div className="pressed-paper overflow-x-auto rounded-[28px]">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-[#eadbc8] bg-white/50 text-[#8a7a6a]">
+            <tr className="border-b border-[#dfe9d8] bg-white/58 text-[#5e6b55]">
               <th className="px-4 py-3 text-left">图片</th>
               <th className="px-4 py-3 text-left">产品</th>
               <th className="px-4 py-3 text-left">分类</th>
@@ -272,7 +323,7 @@ function ProductManager() {
           </thead>
           <tbody>
             {products.map((p) => (
-              <tr key={p.id} className={`border-b border-[#efe2d0] last:border-0 hover:bg-white/50 ${p.stock === 0 ? 'opacity-50' : ''}`}>
+              <tr key={p.id} className={`border-b border-[#e1eadc] last:border-0 hover:bg-white/50 ${p.stock === 0 ? 'opacity-50' : ''}`}>
                 <td className="px-4 py-3"><img src={p.images[0]} alt={p.name} className="h-10 w-10 rounded-lg object-cover" /></td>
                 <td className="px-4 py-3 font-medium text-[#2f271f]">{p.name}</td>
                 <td className="px-4 py-3"><span className="rounded-full bg-[#f6ebe5] px-2 py-0.5 text-xs text-[#b85c62]">{p.category}</span></td>
@@ -295,6 +346,119 @@ function ProductManager() {
           </tbody>
         </table>
       </div>
+    </>
+  );
+}
+
+// ════════════════════════════════════════
+// ORDER MANAGER — 查看订单 & 导出地址 CSV
+// ════════════════════════════════════════
+function OrderManager() {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { fetchOrders(); }, []);
+
+  async function fetchOrders() {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/orders', { cache: 'no-store' });
+      const data = await res.json();
+      setOrders(Array.isArray(data) ? data.reverse() : []);
+    } catch { setOrders([]); }
+    setLoading(false);
+  }
+
+  function exportCSV() {
+    const header = '序号,订单号,下单时间,收件人,手机号,地址,商品,金额,备注,状态\n';
+    const rows = orders.map((o, i) => {
+      const items = o.items?.map((it: any) => `${it.product?.name || '?'}×${it.quantity}`).join('; ') || '';
+      return [
+        i + 1, o.id, new Date(o.createdAt).toLocaleString('zh-CN'),
+        o.customer?.name || '', o.customer?.phone || '', o.customer?.address || '',
+        items, o.total, o.customer?.note || '',
+        o.status === 'paid' ? '已付款' : o.status === 'shipped' ? '已发货' : '待付款',
+      ].join(',');
+    }).join('\n');
+
+    const BOM = '﻿';
+    const blob = new Blob([BOM + header + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `订单地址_${new Date().toLocaleDateString('zh-CN').replace(/\//g, '-')}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function toggleStatus(order: any) {
+    const next = order.status === 'pending' ? 'paid' : order.status === 'paid' ? 'shipped' : 'pending';
+    await fetch('/api/orders', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: order.id, status: next }),
+    });
+    fetchOrders();
+  }
+
+  const statusLabel = (s: string) => s === 'paid' ? '已付款' : s === 'shipped' ? '已发货' : '待付款';
+
+  return (
+    <>
+      <div className="meadow-panel mb-4 flex items-center justify-between rounded-[24px] p-4 text-white">
+        <div>
+          <p className="text-xs font-semibold tracking-[0.2em] text-[#f4ddc8]">ORDERS</p>
+          <h2 className="mt-1 text-lg font-semibold">订单记录（{orders.length}条）</h2>
+        </div>
+        <button onClick={exportCSV} disabled={orders.length === 0} className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#263325] shadow-sm transition-transform hover:-translate-y-0.5 disabled:opacity-40">
+          ⬇ 导出地址 CSV
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="py-10 text-center text-[#8d8176]">加载中...</div>
+      ) : orders.length === 0 ? (
+        <div className="pressed-paper rounded-3xl px-6 py-16 text-center"><p className="text-[#8d8176]">还没有订单</p></div>
+      ) : (
+        <div className="pressed-paper overflow-x-auto rounded-[28px]">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[#dfe9d8] bg-white/58 text-[#5e6b55]">
+                <th className="px-4 py-3 text-left">收件人</th>
+                <th className="px-4 py-3 text-left">手机号</th>
+                <th className="px-4 py-3 text-left">地址</th>
+                <th className="px-4 py-3 text-left">商品</th>
+                <th className="px-4 py-3 text-right">金额</th>
+                <th className="px-4 py-3 text-center">状态</th>
+                <th className="px-4 py-3 text-center">时间</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((o) => (
+                <tr key={o.id} className="border-b border-[#e1eadc] last:border-0 hover:bg-white/50">
+                  <td className="px-4 py-3 font-medium text-[#2f271f]">{o.customer?.name}</td>
+                  <td className="px-4 py-3 text-[#6d6156]">{o.customer?.phone}</td>
+                  <td className="max-w-[14rem] truncate px-4 py-3 text-[#6d6156]" title={o.customer?.address}>{o.customer?.address}</td>
+                  <td className="px-4 py-3 text-[#6d6156]">{o.items?.map((it: any) => `${it.product?.name}×${it.quantity}`).join(', ')}</td>
+                  <td className="px-4 py-3 text-right font-medium text-[#2f271f]">¥{o.total}</td>
+                  <td className="px-4 py-3 text-center">
+                    <button
+                      onClick={() => toggleStatus(o)}
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        o.status === 'paid' ? 'bg-[#dfe9d8] text-[#3d5a31]' :
+                        o.status === 'shipped' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'
+                      }`}
+                    >
+                      {statusLabel(o.status)}
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 text-center text-xs text-[#a29486]">{new Date(o.createdAt).toLocaleDateString('zh-CN')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 }

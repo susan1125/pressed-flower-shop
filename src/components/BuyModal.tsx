@@ -11,7 +11,7 @@ interface Props {
   onSuccess: () => void;
 }
 
-const inputClass = "w-full rounded-2xl border border-[#ded0bd] bg-[#fffaf4] px-3 py-2.5 text-sm text-[#2f271f] outline-none transition-colors focus:border-[#9a6d64] focus:bg-white";
+const inputClass = "w-full rounded-2xl border border-white/48 bg-white/78 px-3 py-2.5 text-sm text-[#263325] outline-none backdrop-blur transition-colors focus:border-[#7b9b70] focus:bg-white";
 const labelClass = "mb-1 block text-sm font-medium text-[#6f6257]";
 
 export default function BuyModal({ product, onClose, onSuccess }: Props) {
@@ -93,9 +93,9 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#211812]/45 p-4 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#102115]/56 p-4 backdrop-blur-md" onClick={onClose}>
       <div className="pressed-paper max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[26px]" onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 z-10 border-b border-[#dfd0bb] bg-[#fffaf4]/92 px-5 py-4 backdrop-blur">
+        <div className="sticky top-0 z-10 border-b border-white/38 bg-[#f4efe6]/86 px-5 py-4 backdrop-blur-xl">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold tracking-[0.18em] text-[#b85c62]">ORDER</p>
@@ -108,7 +108,7 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
         <div className="p-5">
           {step === 'form' && (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="flex gap-3 rounded-3xl border border-[#eadbc8] bg-white/58 p-3">
+	              <div className="flex gap-3 rounded-3xl border border-white/48 bg-white/58 p-3">
                 <Image src={product.images[0] || '/placeholder.svg'} alt={product.name} width={80} height={80} className="h-20 w-20 rounded-2xl object-cover" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold text-[#2f271f]">{product.name}</p>
@@ -117,7 +117,7 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between rounded-3xl bg-[#efe2d0]/70 p-3">
+	              <div className="flex items-center justify-between rounded-3xl border border-white/42 bg-[#e9f0de]/68 p-3">
                 <span className="text-sm text-[#6f6257]">数量{min > 1 ? `（${min}份起购）` : ''}</span>
                 <div className="flex items-center gap-3">
                   <button type="button" onClick={() => setQty(Math.max(min, qty - 1))} className="flex h-8 w-8 items-center justify-center rounded-full border border-[#cfbda5] bg-white text-[#6f6257]">−</button>
@@ -206,7 +206,7 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
                 <input value={note} onChange={(e) => setNote(e.target.value)} className={inputClass} placeholder="颜色偏好、特殊要求等" />
               </div>
 
-              <button type="submit" className="w-full rounded-full bg-[#251f1a] py-3 font-semibold text-white transition-colors hover:bg-[#3b312a]">
+	              <button type="submit" className="w-full rounded-full bg-[#31523a] py-3 font-semibold text-white transition-colors hover:bg-[#263f2d]">
                 下一步：付款 ¥{total}
               </button>
             </form>
@@ -218,11 +218,11 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
               <p className="text-4xl font-semibold text-[#b85c62]">¥{total}</p>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-3xl border border-[#dfd0bb] bg-white/62 p-3">
+	                <div className="rounded-3xl border border-white/48 bg-white/62 p-3">
                   <p className="mb-2 text-sm font-semibold text-[#3f7a4f]">微信支付</p>
                   <Image src="/api/uploads/wechat-pay.jpg" alt="微信收款码" width={144} height={144} className="mx-auto h-36 w-36 rounded-2xl object-contain shadow-sm" />
                 </div>
-                <div className="rounded-3xl border border-[#dfd0bb] bg-white/62 p-3">
+	                <div className="rounded-3xl border border-white/48 bg-white/62 p-3">
                   <p className="mb-2 text-sm font-semibold text-[#3d6f9f]">支付宝</p>
                   <Image src="/api/uploads/alipay.jpg" alt="支付宝收款码" width={144} height={144} className="mx-auto h-36 w-36 rounded-2xl object-contain shadow-sm" />
                 </div>

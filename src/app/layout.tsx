@@ -14,13 +14,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
+      <head>
+        <link rel="preload" as="image" href="/brand/qinban-meadow.jpg" />
+      </head>
       <body className="flex min-h-screen flex-col antialiased">
         <Navbar />
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-[#dcc9b1] bg-[#fff9f1]/86">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-8 text-sm text-[#766a60] sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-            <p className="font-semibold text-[#2f271f]">沁瓣</p>
-            <p>手工押花，自然之美。每一片花瓣都有自己的故事。</p>
+        <footer className="border-t border-white/35 bg-[#f4efe6]/78 backdrop-blur-xl">
+          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-8 text-sm text-[#5f6655] sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+            <p className="font-semibold text-[#263325]">沁瓣</p>
+            <p>手工押花，把花海的风留在日常物件里。</p>
           </div>
         </footer>
       </body>

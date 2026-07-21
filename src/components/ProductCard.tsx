@@ -11,8 +11,8 @@ export default function ProductCard({ product, onPurchaseComplete }: { product: 
 
   return (
     <>
-      <article className={`pressed-paper group overflow-hidden rounded-[22px] ${soldOut ? 'opacity-55' : ''}`}>
-        <div className="relative aspect-[4/5] overflow-hidden bg-[#eadfce]">
+      <article className={`pressed-paper group overflow-hidden rounded-[22px] transition-transform duration-300 hover:-translate-y-1 ${soldOut ? 'opacity-55' : ''}`}>
+        <div className="relative aspect-[4/5] overflow-hidden bg-[#dfe8d8]">
           <Image
             src={product.images[0] || '/placeholder.svg'}
             alt={product.name}
@@ -20,7 +20,7 @@ export default function ProductCard({ product, onPurchaseComplete }: { product: 
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
-          <div className="absolute left-3 top-3 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-[#b85c62] backdrop-blur">
+          <div className="absolute left-3 top-3 rounded-full bg-white/82 px-3 py-1 text-xs font-semibold text-[#31523a] backdrop-blur">
             {product.category}
           </div>
           {soldOut && (
@@ -52,7 +52,7 @@ export default function ProductCard({ product, onPurchaseComplete }: { product: 
               className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                 soldOut
                   ? 'bg-[#e5ddd3] text-[#91867a]'
-                  : 'bg-[#251f1a] text-white hover:bg-[#3b312a]'
+                  : 'bg-[#31523a] text-white shadow-sm hover:bg-[#263f2d]'
               }`}
             >
               {soldOut ? '已售罄' : '立即购买'}

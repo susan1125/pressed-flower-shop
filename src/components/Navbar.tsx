@@ -5,40 +5,38 @@ import { useState, useEffect } from 'react';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('admin_auth') === 'true';
-  });
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const handleStorage = () => {
       setIsAdmin(localStorage.getItem('admin_auth') === 'true');
     };
+    handleStorage();
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-[#dcc9b1] bg-[#fff9f1]/90 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 border-b border-white/35 bg-[#f4efe6]/76 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#3f5f47] text-base font-semibold text-white shadow-sm">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#31523a] text-base font-semibold text-white shadow-sm">
             沁
           </span>
-          <span className="text-lg font-semibold tracking-wide text-[#2f271f]">沁瓣</span>
+          <span className="text-lg font-semibold tracking-wide text-[#263325]">沁瓣</span>
         </Link>
 
         <div className="hidden items-center gap-2 md:flex">
           <Link
             href="/"
-            className="rounded-full px-4 py-2 text-sm font-medium text-[#66594f] transition-colors hover:bg-white hover:text-[#2f271f]"
+            className="rounded-full px-4 py-2 text-sm font-medium text-[#4e5a48] transition-colors hover:bg-white/72 hover:text-[#263325]"
           >
             作品展示
           </Link>
           {isAdmin && (
             <Link
               href="/admin"
-              className="rounded-full border border-[#dcc9b1] bg-white/60 px-4 py-2 text-sm font-medium text-[#8a7a6a] transition-colors hover:bg-white hover:text-[#2f271f]"
+              className="rounded-full border border-white/45 bg-white/52 px-4 py-2 text-sm font-medium text-[#5b684f] transition-colors hover:bg-white/82 hover:text-[#263325]"
             >
               管理
             </Link>
@@ -46,7 +44,7 @@ export default function Navbar() {
         </div>
 
         <button
-          className="md:hidden rounded-full border border-[#dcc9b1] bg-white/70 p-2 text-[#4f4338]"
+          className="md:hidden rounded-full border border-white/45 bg-white/70 p-2 text-[#314233]"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
           aria-expanded={menuOpen}
@@ -62,7 +60,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="border-t border-[#dcc9b1] bg-[#fff9f1] px-4 py-3 md:hidden">
+        <div className="border-t border-white/40 bg-[#f4efe6]/92 px-4 py-3 backdrop-blur-xl md:hidden">
           <Link href="/" className="block rounded-md px-3 py-2 text-[#4f4338]" onClick={() => setMenuOpen(false)}>
             作品展示
           </Link>
