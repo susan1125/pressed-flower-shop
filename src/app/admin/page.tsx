@@ -356,52 +356,53 @@ function ProductManager() {
         </>
       )}
 
-      <div className="pressed-paper overflow-x-auto rounded-[28px]">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-[#dfe9d8] bg-white/58 text-[#5e6b55]">
-              <th className="px-4 py-3 text-center">精选</th>
-              <th className="px-4 py-3 text-left">图片</th>
-              <th className="px-4 py-3 text-left">产品</th>
-              <th className="px-4 py-3 text-left">分类</th>
-              <th className="px-4 py-3 text-right">价格</th>
-              <th className="px-4 py-3 text-center">库存</th>
-              <th className="px-4 py-3 text-center">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((p) => (
-              <tr key={p.id} className={`border-b border-[#e1eadc] last:border-0 hover:bg-white/50 ${p.stock === 0 ? 'opacity-50' : ''}`}>
-                <td className="px-4 py-3 text-center">
-                  <button
-                    onClick={() => handleToggleFeatured(p)}
-                    title={p.featured ? '取消精选' : '设为精选'}
-                    className="text-lg transition-colors"
-                  >
-                    {p.featured ? '⭐' : '☆'}
-                  </button>
-                </td>
-                <td className="px-4 py-3"><img src={p.images[0]} alt={p.name} className="h-10 w-10 rounded-lg object-cover" /></td>
-                <td className="px-4 py-3 font-medium text-[#2f271f]">{p.name}</td>
-                <td className="px-4 py-3"><span className="rounded-full bg-[#f6ebe5] px-2 py-0.5 text-xs text-[#b85c62]">{p.category}</span></td>
-                <td className="px-4 py-3 text-right font-medium text-[#2f271f]">¥{p.price}</td>
-                <td className="px-4 py-3 text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <button onClick={() => handleStockChange(p, -1)} className="flex h-6 w-6 items-center justify-center rounded-full border border-[#d7c4ac] text-xs text-[#66594f] hover:bg-white">−</button>
-                    <span className={`w-8 text-center text-sm font-medium ${p.stock === 0 ? 'text-[#b85c62]' : p.stock < 5 ? 'text-[#d97d53]' : 'text-[#2f271f]'}`}>{p.stock}</span>
-                    <button onClick={() => handleStockChange(p, 1)} className="flex h-6 w-6 items-center justify-center rounded-full border border-[#d7c4ac] text-xs text-[#66594f] hover:bg-white">+</button>
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-center">
-                  <button onClick={() => handleDuplicate(p)} className="mr-2 text-[#4b7a59] hover:text-[#376147]">复制</button>
-                  <button onClick={() => { setEditing(p); setImageUrls(p.images || []); setImageUrl(''); setShowForm(true); }} className="mr-2 text-[#4d77a8] hover:text-[#315e8b]">编辑</button>
-                  <button onClick={() => handleDelete(p.id)} className="text-[#b85c62] hover:text-[#8f4046]">删除</button>
-                </td>
-              </tr>
-            ))}
-            {products.length === 0 && (<tr><td colSpan={7} className="py-8 text-center text-[#a29486]">暂无产品</td></tr>)}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {products.map((p) => (
+          <div key={p.id} className={`pressed-paper group overflow-hidden rounded-[20px] ${p.stock === 0 ? 'opacity-55' : ''}`}>
+            {/* 图片区 */}
+            <div className="relative aspect-square overflow-hidden bg-[#dfe8d8]">
+              <img src={p.images[0] || '/placeholder.svg'} alt={p.name} className="h-full w-full object-cover" />
+              {/* 精选 */}
+              <button
+                onClick={() => handleToggleFeatured(p)}
+                className="absolute left-2 top-2 rounded-full bg-white/80 px-2 py-0.5 text-sm backdrop-blur"
+              >
+                {p.featured ? '⭐' : '☆'}
+              </button>
+              {p.images.length > 1 && (
+                <span className="absolute right-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-white backdrop-blur">
+                  {p.images.length}图
+                </span>
+              )}
+            </div>
+            {/* 信息区 */}
+            <div className="p-3">
+              <div className="flex items-start justify-between gap-1">
+                <h4 className="text-sm font-semibold text-[#2c251f] leading-snug line-clamp-2 flex-1">{p.name}</h4>
+              </div>
+              <span className="mt-1 inline-block rounded-full bg-[#f6ebe5] px-2 py-0.5 text-[10px] text-[#b85c62]">{p.category}</span>
+              <div className="mt-2 flex items-center justify-between">
+                <p className="text-base font-bold text-[#b85c62]">¥{p.price}</p>
+                <div className="flex items-center gap-0.5">
+                  <button onClick={() => handleStockChange(p, -1)} className="flex h-5 w-5 items-center justify-center rounded-full border border-[#d7c4ac] text-[10px] text-[#66594f] hover:bg-white">−</button>
+                  <span className={`w-6 text-center text-xs font-medium ${p.stock === 0 ? 'text-[#b85c62]' : p.stock < 5 ? 'text-[#d97d53]' : 'text-[#2f271f]'}`}>{p.stock}</span>
+                  <button onClick={() => handleStockChange(p, 1)} className="flex h-5 w-5 items-center justify-center rounded-full border border-[#d7c4ac] text-[10px] text-[#66594f] hover:bg-white">+</button>
+                </div>
+              </div>
+              {/* 操作按钮 */}
+              <div className="mt-2 flex gap-1 border-t border-[#e1eadc] pt-2">
+                <button onClick={() => { setEditing(p); setImageUrls(p.images || []); setImageUrl(''); setShowForm(true); }} className="flex-1 rounded-full bg-[#4d77a8] py-1 text-[10px] font-medium text-white hover:bg-[#315e8b]">编辑</button>
+                <button onClick={() => handleDuplicate(p)} className="rounded-full bg-[#4b7a59] px-2 py-1 text-[10px] font-medium text-white hover:bg-[#376147]">复制</button>
+                <button onClick={() => handleDelete(p.id)} className="rounded-full bg-[#b85c62] px-2 py-1 text-[10px] font-medium text-white hover:bg-[#8f4046]">删</button>
+              </div>
+            </div>
+          </div>
+        ))}
+        {products.length === 0 && (
+          <div className="pressed-paper col-span-full rounded-3xl px-6 py-16 text-center">
+            <p className="text-[#8d8176]">暂无产品</p>
+          </div>
+        )}
       </div>
     </>
   );
