@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Product, Category } from '@/types';
 import CategoryFilter from '@/components/CategoryFilter';
@@ -21,6 +21,8 @@ export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState<Category | '全部'>('全部');
   const [loading, setLoading] = useState(true);
   const [showcaseProduct, setShowcaseProduct] = useState<Product | null>(null);
+  const [showcaseActive, setShowcaseActive] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -190,7 +192,15 @@ export default function HomePage() {
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </button>
               {/* 滚动轨道 */}
-              <div className="carousel-track flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div
+                ref={carouselRef}
+                onScroll={(e) => {
+                  const el = e.currentTarget;
+                  const idx = Math.round(el.scrollLeft / el.clientWidth);
+                  setShowcaseActive(idx);
+                }}
+                className="carousel-track flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
                 {heroWorks.map((work: any, idx: number) => (
                   <div
                     key={idx}
@@ -220,7 +230,12 @@ export default function HomePage() {
               {heroWorks.length > 1 && (
                 <div className="mt-3 flex justify-center gap-1.5">
                   {heroWorks.map((_: any, idx: number) => (
-                    <span key={idx} className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                    <span
+                      key={idx}
+                      className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+                        idx === showcaseActive ? 'w-4 bg-white' : 'bg-white/40'
+                      }`}
+                    />
                   ))}
                 </div>
               )}
