@@ -16,6 +16,8 @@ const fallbackWorks = [
   { name: '环形镜子', image: '/api/uploads/1784610179425-3bzsia.jpg' },
 ];
 
+const PAGE_SIZE = 12;
+
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [activeCategory, setActiveCategory] = useState<Category | '全部'>('全部');
@@ -23,6 +25,7 @@ export default function HomePage() {
   const [showcaseProduct, setShowcaseProduct] = useState<Product | null>(null);
   const [showcaseActive, setShowcaseActive] = useState(0);
   const [scales, setScales] = useState<number[]>([]);
+  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,8 +77,13 @@ export default function HomePage() {
 
   function handleCategoryChange(cat: Category | '全部') {
     setActiveCategory(cat);
+    setDisplayCount(PAGE_SIZE);
     loadProducts(cat);
   }
+
+  // 当前显示的产品（分页）
+  const visibleProducts = products.slice(0, displayCount);
+  const hasMore = displayCount < products.length;
 
   async function handlePurchaseComplete() {
     try {
@@ -167,7 +175,7 @@ export default function HomePage() {
                           transform: scales[idx] ? `scale(${scales[idx]})` : 'scale(0.88)',
                         }}
                       >
-                        <Image src={work.image} alt={work.name} fill priority={idx < 3} className="object-cover" sizes="(max-width: 640px) 120px, (max-width: 1024px) 36vw, 220px" />
+                        <Image src={work.image} alt={work.name} fill priority={idx < 1} className="object-cover" sizes="(max-width: 640px) 120px, (max-width: 1024px) 36vw, 220px" />
                         {work.product && (
                           <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-3 pt-10 transition-opacity ${scales[idx] && scales[idx] > 1.05 ? 'opacity-100' : 'opacity-0'}`}>
                             <p className="text-xs font-medium text-white truncate">{work.name}</p>
@@ -250,11 +258,20 @@ export default function HomePage() {
             <p className="mt-2 text-sm text-[#8d8176]">新作品正在手工制作中，敬请期待。</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} onPurchaseComplete={handlePurchaseComplete} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
+              {visibleProducts.map((product) => (
+                <ProductCard key={product.id} product={product} onPurchaseComplete={handlePurchaseComplete} />
+              ))}
+            </div>
+            {hasMore && (
+              <div className="mt-8 text-center">
+                <button onClick={() => setDisplayCount((prev) => prev + PAGE_SIZE)} className="rounded-full border border-white/40 bg-white/14 px-8 py-3 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/24">
+                  查看更多（还有 {products.length - displayCount} 件）
+                </button>
+              </div>
+            )}
+          </>
         )}
         </div>
       </section>

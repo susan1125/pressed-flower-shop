@@ -22,6 +22,7 @@ export default function ProductCard({ product, onPurchaseComplete }: { product: 
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            loading={hasMultiple && imgIdx > 0 ? 'lazy' : undefined}
           />
           {/* 多图切换 */}
           {hasMultiple && (
