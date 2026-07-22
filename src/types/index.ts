@@ -12,6 +12,7 @@ export interface Product {
   stock: number;
   minOrder: number;
   createdAt: string;
+  featured?: boolean;
 }
 
 export interface CartItem {

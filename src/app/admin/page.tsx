@@ -172,6 +172,15 @@ function ProductManager() {
     fetchProducts();
   }
 
+  async function handleToggleFeatured(product: Product) {
+    await fetch(`/api/products/${product.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ featured: !product.featured }),
+    });
+    fetchProducts();
+  }
+
   async function uploadImage(file: File) {
     setUploading(true);
     const fd = new FormData();
@@ -216,7 +225,9 @@ function ProductManager() {
       <div className="meadow-panel mb-4 flex items-center justify-between rounded-[24px] p-4 text-white">
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-[#f4ddc8]">WORKS</p>
-          <h2 className="mt-1 text-lg font-semibold">产品列表（{products.length}件）</h2>
+          <h2 className="mt-1 text-lg font-semibold">
+            产品列表（{products.length}件{products.filter(p => p.featured).length > 0 ? `，${products.filter(p => p.featured).length}件精选` : ''}）
+          </h2>
         </div>
         <button
           onClick={() => { setEditing(null); setImageUrl(''); setShowForm(true); }}
@@ -313,6 +324,7 @@ function ProductManager() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#dfe9d8] bg-white/58 text-[#5e6b55]">
+              <th className="px-4 py-3 text-center">精选</th>
               <th className="px-4 py-3 text-left">图片</th>
               <th className="px-4 py-3 text-left">产品</th>
               <th className="px-4 py-3 text-left">分类</th>
@@ -324,6 +336,15 @@ function ProductManager() {
           <tbody>
             {products.map((p) => (
               <tr key={p.id} className={`border-b border-[#e1eadc] last:border-0 hover:bg-white/50 ${p.stock === 0 ? 'opacity-50' : ''}`}>
+                <td className="px-4 py-3 text-center">
+                  <button
+                    onClick={() => handleToggleFeatured(p)}
+                    title={p.featured ? '取消精选' : '设为精选'}
+                    className="text-lg transition-colors"
+                  >
+                    {p.featured ? '⭐' : '☆'}
+                  </button>
+                </td>
                 <td className="px-4 py-3"><img src={p.images[0]} alt={p.name} className="h-10 w-10 rounded-lg object-cover" /></td>
                 <td className="px-4 py-3 font-medium text-[#2f271f]">{p.name}</td>
                 <td className="px-4 py-3"><span className="rounded-full bg-[#f6ebe5] px-2 py-0.5 text-xs text-[#b85c62]">{p.category}</span></td>
@@ -342,7 +363,7 @@ function ProductManager() {
                 </td>
               </tr>
             ))}
-            {products.length === 0 && (<tr><td colSpan={6} className="py-8 text-center text-[#a29486]">暂无产品</td></tr>)}
+            {products.length === 0 && (<tr><td colSpan={7} className="py-8 text-center text-[#a29486]">暂无产品</td></tr>)}
           </tbody>
         </table>
       </div>

@@ -84,12 +84,19 @@ export default function HomePage() {
     } catch {}
   }
 
-  // 动态构建橱窗：优先用有实物图的产品，不够再补兜底图
-  const liveWorks = products
-    .filter((p) => p.images[0] && p.images[0] !== '/placeholder.svg' && p.stock > 0)
+  // 构建橱窗：优先取精选产品，没有则自动取有图产品，都不够再兜底
+  const featuredWorks = products
+    .filter((p) => p.featured && p.images[0] && p.images[0] !== '/placeholder.svg')
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 6)
     .map((p) => ({ name: p.name, image: p.images[0], product: p }));
-  const heroWorks = liveWorks.length >= 4 ? liveWorks : fallbackWorks.map((f) => ({ ...f, product: null }));
+  const autoWorks = products
+    .filter((p) => !p.featured && p.images[0] && p.images[0] !== '/placeholder.svg' && p.stock > 0)
+    .slice(0, 6)
+    .map((p) => ({ name: p.name, image: p.images[0], product: p }));
+  const heroWorks = featuredWorks.length > 0
+    ? featuredWorks
+    : autoWorks.length >= 4 ? autoWorks : fallbackWorks.map((f) => ({ ...f, product: null }));
 
   return (
     <div className="floral-page">
