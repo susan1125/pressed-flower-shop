@@ -7,19 +7,49 @@ import BuyModal from './BuyModal';
 
 export default function ProductCard({ product, onPurchaseComplete }: { product: Product; onPurchaseComplete?: () => void }) {
   const [showBuy, setShowBuy] = useState(false);
+  const [imgIdx, setImgIdx] = useState(0);
   const soldOut = product.stock === 0;
+  const images = product.images?.filter(Boolean) || ['/placeholder.svg'];
+  const hasMultiple = images.length > 1;
 
   return (
     <>
       <article className={`pressed-paper group overflow-hidden rounded-[22px] transition-transform duration-300 hover:-translate-y-1 ${soldOut ? 'opacity-55' : ''}`}>
         <div className="relative aspect-[4/5] overflow-hidden bg-[#dfe8d8]">
           <Image
-            src={product.images[0] || '/placeholder.svg'}
-            alt={product.name}
+            src={images[imgIdx] || '/placeholder.svg'}
+            alt={`${product.name}${hasMultiple ? ` · ${imgIdx + 1}` : ''}`}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
+          {/* 多图切换 */}
+          {hasMultiple && (
+            <div className="absolute inset-x-0 bottom-0 flex justify-center gap-1.5 p-2">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => { e.stopPropagation(); setImgIdx(i); }}
+                  className={`h-1.5 rounded-full transition-all duration-200 ${
+                    i === imgIdx ? 'w-3 bg-white' : 'w-1.5 bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+          {/* 左右箭头 */}
+          {hasMultiple && (
+            <>
+              <button
+                onClick={(e) => { e.stopPropagation(); setImgIdx((imgIdx - 1 + images.length) % images.length); }}
+                className="absolute left-1 top-1/2 -translate-y-1/2 rounded-full bg-white/70 p-1 text-xs text-[#333] opacity-0 transition-opacity group-hover:opacity-100"
+              >‹</button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setImgIdx((imgIdx + 1) % images.length); }}
+                className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-white/70 p-1 text-xs text-[#333] opacity-0 transition-opacity group-hover:opacity-100"
+              >›</button>
+            </>
+          )}
           <div className="absolute left-3 top-3 rounded-full bg-white/82 px-3 py-1 text-xs font-semibold text-[#31523a] backdrop-blur">
             {product.category}
           </div>

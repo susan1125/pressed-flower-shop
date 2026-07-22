@@ -119,6 +119,7 @@ function ProductManager() {
   const [editing, setEditing] = useState<Product | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [gallery, setGallery] = useState<string[]>([]);
@@ -188,7 +189,7 @@ function ProductManager() {
     const res = await fetch('/api/upload', { method: 'POST', body: fd });
     const data = await res.json();
     setUploading(false);
-    if (data.url) setImageUrl(data.url);
+    if (data.url) { setImageUrl(data.url); setImageUrls([...imageUrls, data.url]); }
     else alert(data.error || '上传失败');
   }
 
@@ -200,7 +201,7 @@ function ProductManager() {
       category: fd.get('category') as Category,
       price: Number(fd.get('price')),
       description: (fd.get('description') as string) || '',
-      images: [imageUrl || '/placeholder.svg'],
+      images: imageUrls.length > 0 ? imageUrls : [imageUrl || '/placeholder.svg'],
       stock: Number(fd.get('stock')) || 0,
     };
 
@@ -272,22 +273,49 @@ function ProductManager() {
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium text-[#6f6257]">产品图片</label>
+              <label className="mb-1 block text-sm font-medium text-[#6f6257]">产品图片（可添加多张）</label>
+              {/* 已添加的图片 */}
+              {imageUrls.length > 0 && (
+                <div className="mb-2 flex flex-wrap gap-2">
+                  {imageUrls.map((url, i) => (
+                    <div key={i} className="relative">
+                      <img src={url} alt={`图${i + 1}`} className="h-16 w-16 rounded-xl object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setImageUrls(imageUrls.filter((_, j) => j !== i))}
+                        className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-400 text-xs text-white"
+                      >×</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* 上传区域 */}
               <div
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                 onDragLeave={() => setDragOver(false)}
                 onDrop={(e) => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files[0]; if (f) uploadImage(f); }}
                 onClick={() => fileInputRef.current?.click()}
-                className={`rounded-[22px] border-2 border-dashed p-6 text-center transition-colors ${dragOver ? 'border-[#b85c62] bg-white/82' : 'border-white/52 bg-white/48'} ${uploading ? 'pointer-events-none opacity-50' : ''}`}
+                className={`rounded-[22px] border-2 border-dashed p-4 text-center transition-colors ${dragOver ? 'border-[#b85c62] bg-white/82' : 'border-white/52 bg-white/48'} ${uploading ? 'pointer-events-none opacity-50' : ''}`}
               >
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadImage(f); }} className="hidden" />
                 {uploading ? (<div className="text-[#8a7a6a]"><p className="text-lg">⏳</p><p className="text-sm">上传中...</p></div>)
-                : imageUrl ? (<div><img src={imageUrl} alt="预览" className="mx-auto h-32 w-32 rounded-2xl object-cover shadow-sm" /><p className="mt-1 text-xs text-[#8a7a6a]">点击或拖拽更换</p></div>)
-                : (<div className="text-[#8a7a6a]"><p className="mb-1 text-2xl">📷</p><p className="text-sm">点击或拖拽上传图片</p><p className="mt-1 text-xs">JPG/PNG/WebP，最大10MB</p></div>)}
+                : (<div className="text-[#8a7a6a]"><p className="mb-1 text-xl">📷</p><p className="text-xs">点击或拖拽上传图片</p><p className="mt-1 text-[10px]">JPG/PNG/WebP，最大10MB</p></div>)}
               </div>
               <div className="mt-2 flex items-center gap-2">
-                <span className="text-xs text-[#a29486]">或链接：</span>
-                <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="flex-1 rounded-xl border border-[#ded0bd] bg-[#fffaf4] px-3 py-2 text-xs outline-none focus:border-[#9a6d64]" placeholder="https://..." />
+                <span className="shrink-0 text-xs text-[#a29486]">或链接：</span>
+                <input
+                  type="text"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && imageUrl.trim()) {
+                      e.preventDefault();
+                      setImageUrls([...imageUrls, imageUrl.trim()]);
+                      setImageUrl('');
+                    }
+                  }}
+                  className="flex-1 rounded-xl border border-[#ded0bd] bg-[#fffaf4] px-3 py-2 text-xs outline-none focus:border-[#9a6d64]" placeholder="粘贴图片链接后按回车添加"
+                />
               </div>
 
               <div className="mt-2">
@@ -300,8 +328,8 @@ function ProductManager() {
                       <button
                         key={img}
                         type="button"
-                        onClick={() => { setImageUrl(img); setShowGallery(false); }}
-                        className={`aspect-square overflow-hidden rounded-xl border-2 ${imageUrl === img ? 'border-[#b85c62]' : 'border-[#dfd0bd]'}`}
+                        onClick={() => { setImageUrls([...imageUrls, img]); setShowGallery(false); }}
+                        className={`aspect-square overflow-hidden rounded-xl border-2 ${imageUrls.includes(img) ? 'border-[#b85c62]' : 'border-[#dfd0bd]'}`}
                       >
                         <img src={img} alt="" className="h-full w-full object-cover" />
                       </button>
@@ -366,7 +394,7 @@ function ProductManager() {
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button onClick={() => handleDuplicate(p)} className="mr-2 text-[#4b7a59] hover:text-[#376147]">复制</button>
-                  <button onClick={() => { setEditing(p); setImageUrl(p.images[0] || ''); setShowForm(true); }} className="mr-2 text-[#4d77a8] hover:text-[#315e8b]">编辑</button>
+                  <button onClick={() => { setEditing(p); setImageUrls(p.images || []); setImageUrl(''); setShowForm(true); }} className="mr-2 text-[#4d77a8] hover:text-[#315e8b]">编辑</button>
                   <button onClick={() => handleDelete(p.id)} className="text-[#b85c62] hover:text-[#8f4046]">删除</button>
                 </td>
               </tr>
