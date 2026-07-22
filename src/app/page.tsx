@@ -22,6 +22,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [showcaseProduct, setShowcaseProduct] = useState<Product | null>(null);
   const [showcaseActive, setShowcaseActive] = useState(0);
+  const [scales, setScales] = useState<number[]>([]);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -100,6 +101,34 @@ export default function HomePage() {
     ? featuredWorks
     : autoWorks.length >= 4 ? autoWorks : fallbackWorks.map((f) => ({ ...f, product: null }));
 
+  // 滚动时计算 Dock 放大效果
+  function updateCarouselScales() {
+    const el = carouselRef.current;
+    if (!el || heroWorks.length === 0) return;
+    const viewCenter = el.getBoundingClientRect().left + el.clientWidth / 2;
+    const items = el.querySelectorAll('.carousel-item');
+    const newScales: number[] = [];
+    const maxScale = 1.1;
+    const minScale = 0.88;
+    const influence = el.clientWidth * 0.5;
+    let closestIdx = 0, closestDist = Infinity;
+    items.forEach((item, i) => {
+      const rect = item.getBoundingClientRect();
+      const dist = Math.abs((rect.left + rect.right) / 2 - viewCenter);
+      if (dist < closestDist) { closestDist = dist; closestIdx = i; }
+      const t = Math.max(0, 1 - dist / influence);
+      newScales.push(minScale + (maxScale - minScale) * t * t);
+    });
+    setScales(newScales);
+    setShowcaseActive(closestIdx);
+  }
+
+  // 数据加载后初始化缩放
+  useEffect(() => {
+    const timer = setTimeout(() => updateCarouselScales(), 150);
+    return () => clearTimeout(timer);
+  }, [products]);
+
   return (
     <div className="floral-page">
       <section className="relative overflow-hidden md:min-h-[calc(100vh-64px)]">
@@ -169,76 +198,44 @@ export default function HomePage() {
             </div>
 
             <div className="relative group/carousel">
-              {/* 左箭头 */}
-              <button
-                onClick={(e) => {
-                  const el = (e.currentTarget.parentElement?.querySelector('.carousel-track') as HTMLElement);
-                  if (el) el.scrollBy({ left: -el.clientWidth * 0.7, behavior: 'smooth' });
-                }}
-                className="absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/28 p-3 text-white shadow-lg backdrop-blur opacity-0 transition-opacity group-hover/carousel:opacity-100 hover:bg-white/50"
-                aria-label="上一页"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              {/* 右箭头 */}
-              <button
-                onClick={(e) => {
-                  const el = (e.currentTarget.parentElement?.querySelector('.carousel-track') as HTMLElement);
-                  if (el) el.scrollBy({ left: el.clientWidth * 0.7, behavior: 'smooth' });
-                }}
-                className="absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/28 p-3 text-white shadow-lg backdrop-blur opacity-0 transition-opacity group-hover/carousel:opacity-100 hover:bg-white/50"
-                aria-label="下一页"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-              </button>
               {/* 滚动轨道 */}
               <div
                 ref={carouselRef}
-                onScroll={(e) => {
-                  const el = e.currentTarget;
-                  const idx = Math.round(el.scrollLeft / el.clientWidth);
-                  setShowcaseActive(idx);
-                }}
-                className="carousel-track flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                onScroll={updateCarouselScales}
+                className="carousel-track flex items-center gap-2 overflow-x-auto scroll-smooth py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                style={{ scrollSnapType: 'x proximity', paddingLeft: 'calc(50% - 80px)', paddingRight: 'calc(50% - 80px)' }}
               >
                 {heroWorks.map((work: any, idx: number) => (
                   <div
                     key={idx}
                     onClick={() => { if (work.product) setShowcaseProduct(work.product); }}
-                    className={`relative shrink-0 snap-start overflow-hidden rounded-[18px] bg-[#e6dacb] shadow-lg sm:rounded-[22px] ${
-                      work.product ? 'cursor-pointer group/hero' : ''
-                    } w-[75vw] sm:w-[54vw] lg:w-[30vw]`}
-                    style={{ aspectRatio: '4/5' }}
+                    className={`carousel-item relative shrink-0 overflow-hidden rounded-[18px] bg-[#e6dacb] shadow-lg transition-transform duration-200 ease-out sm:rounded-[22px] ${
+                      work.product ? 'cursor-pointer' : ''
+                    }`}
+                    style={{
+                      width: 'clamp(140px, 40vw, 260px)',
+                      aspectRatio: '4/5',
+                      transform: scales[idx] ? `scale(${scales[idx]})` : 'scale(0.88)',
+                    }}
                   >
                     <Image
                       src={work.image} alt={work.name}
                       fill
                       priority={idx < 3}
-                      className="object-cover transition-transform duration-500 group-hover/hero:scale-105"
-                      sizes="(max-width: 640px) 75vw, (max-width: 1024px) 54vw, 30vw"
+                      className="object-cover"
+                      sizes="(max-width: 640px) 140px, (max-width: 1024px) 40vw, 260px"
                     />
                     {work.product && (
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-4 pt-12 opacity-60 transition-opacity group-hover/hero:opacity-100">
-                        <p className="text-sm font-medium text-white truncate">{work.name}</p>
-                        <p className="text-base font-bold text-white">¥{work.product.price}</p>
+                      <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-3 pt-10 transition-opacity ${
+                        scales[idx] && scales[idx] > 1.05 ? 'opacity-100' : 'opacity-0'
+                      }`}>
+                        <p className="text-xs font-medium text-white truncate">{work.name}</p>
+                        <p className="text-sm font-bold text-white">¥{work.product.price}</p>
                       </div>
                     )}
                   </div>
                 ))}
               </div>
-              {/* 页码指示点 */}
-              {heroWorks.length > 1 && (
-                <div className="mt-3 flex justify-center gap-1.5">
-                  {heroWorks.map((_: any, idx: number) => (
-                    <span
-                      key={idx}
-                      className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
-                        idx === showcaseActive ? 'w-4 bg-white' : 'bg-white/40'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         </div>
