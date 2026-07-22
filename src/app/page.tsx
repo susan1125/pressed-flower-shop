@@ -166,36 +166,64 @@ export default function HomePage() {
               </span>
             </div>
 
-            <div className="grid h-[340px] grid-cols-12 grid-rows-12 gap-2 sm:h-[460px] sm:gap-3 lg:h-[500px]">
-              {heroWorks.map((work: any, idx: number) => (
-                <div
-                  key={idx}
-                  onClick={() => { if (work.product) setShowcaseProduct(work.product); }}
-                  className={`relative overflow-hidden rounded-[18px] bg-[#e6dacb] shadow-lg sm:rounded-[22px] ${
-                    work.product ? 'cursor-pointer group/hero' : ''
-                  } ${
-                    idx === 0 ? 'col-span-7 row-span-7' :
-                    idx === 1 ? 'col-span-5 row-span-5' :
-                    idx === 2 ? 'col-span-5 row-span-4' :
-                    idx === 3 ? 'col-span-4 row-span-5' :
-                    idx === 4 ? 'col-span-4 row-span-5' : 'col-span-4 row-span-3'
-                  }`}
-                >
-                  <Image
-                    src={work.image} alt={work.name}
-                    fill
-                    priority={idx < 3}
-                    className="object-cover transition-transform duration-500 group-hover/hero:scale-105"
-                    sizes="(max-width: 1024px) 58vw, 32vw"
-                  />
-                  {work.product && (
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent p-3 pt-8 opacity-0 transition-opacity group-hover/hero:opacity-100">
-                      <p className="text-xs font-medium text-white truncate">{work.name}</p>
-                      <p className="text-sm font-bold text-white">¥{work.product.price}</p>
-                    </div>
-                  )}
+            <div className="relative group/carousel">
+              {/* 左箭头 */}
+              <button
+                onClick={(e) => {
+                  const el = (e.currentTarget.parentElement?.querySelector('.carousel-track') as HTMLElement);
+                  if (el) el.scrollBy({ left: -el.clientWidth * 0.7, behavior: 'smooth' });
+                }}
+                className="absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/28 p-3 text-white shadow-lg backdrop-blur opacity-0 transition-opacity group-hover/carousel:opacity-100 hover:bg-white/50"
+                aria-label="上一页"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              {/* 右箭头 */}
+              <button
+                onClick={(e) => {
+                  const el = (e.currentTarget.parentElement?.querySelector('.carousel-track') as HTMLElement);
+                  if (el) el.scrollBy({ left: el.clientWidth * 0.7, behavior: 'smooth' });
+                }}
+                className="absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/28 p-3 text-white shadow-lg backdrop-blur opacity-0 transition-opacity group-hover/carousel:opacity-100 hover:bg-white/50"
+                aria-label="下一页"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </button>
+              {/* 滚动轨道 */}
+              <div className="carousel-track flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {heroWorks.map((work: any, idx: number) => (
+                  <div
+                    key={idx}
+                    onClick={() => { if (work.product) setShowcaseProduct(work.product); }}
+                    className={`relative shrink-0 snap-start overflow-hidden rounded-[18px] bg-[#e6dacb] shadow-lg sm:rounded-[22px] ${
+                      work.product ? 'cursor-pointer group/hero' : ''
+                    } w-[75vw] sm:w-[54vw] lg:w-[30vw]`}
+                    style={{ aspectRatio: '4/5' }}
+                  >
+                    <Image
+                      src={work.image} alt={work.name}
+                      fill
+                      priority={idx < 3}
+                      className="object-cover transition-transform duration-500 group-hover/hero:scale-105"
+                      sizes="(max-width: 640px) 75vw, (max-width: 1024px) 54vw, 30vw"
+                    />
+                    {work.product && (
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-4 pt-12 opacity-60 transition-opacity group-hover/hero:opacity-100">
+                        <p className="text-sm font-medium text-white truncate">{work.name}</p>
+                        <p className="text-base font-bold text-white">¥{work.product.price}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {/* 页码指示点 */}
+              {heroWorks.length > 1 && (
+                <div className="mt-3 flex justify-center gap-1.5">
+                  {heroWorks.map((_: any, idx: number) => (
+                    <span key={idx} className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
