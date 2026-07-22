@@ -238,9 +238,16 @@ function ProductManager() {
       </div>
 
       {showForm && (
-        <div className="pressed-paper mb-6 rounded-[28px] p-6">
-          <h3 className="mb-4 text-lg font-semibold text-[#2c251f]">{editing ? '编辑产品' : '添加产品'}</h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <>
+          <div className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm" onClick={() => { setShowForm(false); setEditing(null); setImageUrl(''); }} />
+          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md overflow-y-auto bg-[#f4efe6] shadow-2xl">
+            <div className="sticky top-0 z-10 border-b border-[#dfd0bb] bg-[#f4efe6]/92 px-6 py-4 backdrop-blur">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-[#2c251f]">{editing ? '编辑产品' : '添加产品'}</h3>
+                <button type="button" onClick={() => { setShowForm(false); setEditing(null); setImageUrl(''); }} className="rounded-full border border-[#dfd0bb] bg-white px-3 py-1 text-xl leading-none text-[#8a7a6a] hover:bg-white">&times;</button>
+              </div>
+            </div>
+          <form onSubmit={handleSubmit} className="space-y-4 p-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="mb-1 block text-sm font-medium text-[#6f6257]">产品名称 *</label>
@@ -317,7 +324,8 @@ function ProductManager() {
               <button type="button" onClick={() => { setShowForm(false); setEditing(null); setImageUrl(''); }} className="rounded-full border border-[#dfd0bd] px-6 py-2 text-[#6f6257]">取消</button>
             </div>
           </form>
-        </div>
+          </div>
+        </>
       )}
 
       <div className="pressed-paper overflow-x-auto rounded-[28px]">
