@@ -34,7 +34,7 @@ export default function HomePage() {
     async function loadInitialProducts() {
       setLoading(true);
       try {
-        const res = await fetch('/api/products', {
+        const res = await fetch(`/api/products?_t=${Date.now()}`, {
           cache: 'no-store',
           headers: { 'Cache-Control': 'no-cache' },
         });
@@ -59,8 +59,8 @@ export default function HomePage() {
     setLoading(true);
     try {
       const params = category && category !== '全部'
-        ? `?category=${encodeURIComponent(category)}`
-        : '';
+        ? `?category=${encodeURIComponent(category)}&_t=${Date.now()}`
+        : `?_t=${Date.now()}`;
       const res = await fetch(`/api/products${params}`, {
         cache: 'no-store',
         headers: { 'Cache-Control': 'no-cache' },
@@ -87,7 +87,7 @@ export default function HomePage() {
 
   async function handlePurchaseComplete() {
     try {
-      const res = await fetch('/api/products', {
+      const res = await fetch(`/api/products?_t=${Date.now()}`, {
         cache: 'no-store',
         headers: { 'Cache-Control': 'no-cache' },
       });

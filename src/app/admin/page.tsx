@@ -136,8 +136,9 @@ function ProductManager() {
   }
 
   async function fetchProducts() {
-    const res = await fetch('/api/products?admin=true', { cache: 'no-store' });
-    setProducts(await res.json());
+    const res = await fetch(`/api/products?admin=true&_t=${Date.now()}`, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
+    const data = await res.json();
+    setProducts(data);
   }
 
   async function handleDelete(id: string) {
