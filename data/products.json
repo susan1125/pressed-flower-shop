@@ -213,5 +213,17 @@
     "stock": 2,
     "id": "1784610373334",
     "createdAt": "2026-07-21T05:06:13.334Z"
+  },
+  {
+    "name": "枝头的惊艳",
+    "category": "画",
+    "price": 5800,
+    "description": "",
+    "images": [
+      "/api/uploads/1784623232581-58ogcb.jpg"
+    ],
+    "stock": 1,
+    "id": "1784623258931",
+    "createdAt": "2026-07-21T08:40:58.931Z"
   }
 ]
