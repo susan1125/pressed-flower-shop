@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from '@/components/Navbar';
 
 export const metadata: Metadata = {
-  title: "沁瓣 - 手工押花文创",
+  title: "沁瓣 QINBAN — Pressed Flower Atelier",
   description: "沁瓣制作手工押花台灯、包、扇子、书签、镜子、装饰画，每一件都是独一无二的自然之美",
 };
 
