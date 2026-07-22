@@ -1,6 +1,6 @@
-export type Category = '台灯' | '包' | '扇子' | '书签' | '镜子' | '笔记本' | '画' | '画框' | '标本' | '冰箱贴';
+export type Category = '台灯' | '包' | '扇子' | '书签' | '镜子' | '笔记本' | '装饰画' | '画框' | '标本' | '冰箱贴';
 
-export const CATEGORIES: Category[] = ['台灯', '包', '扇子', '书签', '镜子', '笔记本', '画', '画框', '标本', '冰箱贴'];
+export const CATEGORIES: Category[] = ['台灯', '包', '扇子', '书签', '镜子', '笔记本', '装饰画', '画框', '标本', '冰箱贴'];
 
 export interface Product {
   id: string;
