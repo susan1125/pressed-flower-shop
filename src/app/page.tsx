@@ -135,110 +135,90 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,29,20,.32),rgba(18,29,20,.18),rgba(18,29,20,.3))] md:bg-[linear-gradient(90deg,rgba(18,29,20,.62),rgba(18,29,20,.28),rgba(255,255,255,.06))]" />
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#f4efe6]/40 to-transparent md:h-44 md:from-[#f4efe6]/90" />
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-6 px-4 py-8 sm:px-6 md:min-h-[calc(100vh-64px)] lg:grid-cols-[0.82fr_1.18fr] lg:px-8 lg:gap-10 lg:py-14">
+        {/* 文字区域：桌面端橱窗 float 到右侧，文字自然环绕 */}
+        <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 md:min-h-[calc(100vh-64px)] md:py-20 lg:px-8 lg:py-24">
           <div className="text-white">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/18 px-3 py-1.5 text-xs font-medium text-white shadow-sm backdrop-blur-md sm:px-4 sm:py-2 sm:text-sm">
-            <span className="h-2 w-2 rounded-full bg-[#b78d91]" />
-            真花押制 · 每件不同
-          </div>
 
-          <h1 className="max-w-2xl text-5xl font-semibold leading-none tracking-normal sm:text-7xl lg:text-8xl">
-            沁瓣
-          </h1>
-          <p className="mt-4 text-xl font-medium leading-tight text-[#fff6eb] sm:text-3xl">
-            把花海的风，留在日常物件里
-          </p>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-[#fff3e4] sm:text-lg sm:leading-8">
-            书签、团扇、镜子、笔记本和包包都使用真实花材制作。花瓣的颜色、位置和纹理会自然变化，所以每一件作品都只属于这一批。
-          </p>
-
-          <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
-            <a
-              href="#products"
-              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[#263325] shadow-[0_16px_35px_rgba(0,0,0,.22)] transition-transform hover:-translate-y-0.5 sm:px-6 sm:py-3"
-            >
-              查看作品
-            </a>
-            <a
-              href="/admin"
-              className="rounded-full border border-white/45 bg-white/16 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/24 sm:px-6 sm:py-3"
-            >
-              上传新作品
-            </a>
-          </div>
-
-          <div className="mt-6 grid max-w-lg grid-cols-3 gap-2 sm:mt-10 sm:gap-3">
-            <div className="rounded-2xl border border-white/24 bg-white/16 p-3 backdrop-blur-md sm:p-4">
-              <p className="text-xl font-semibold sm:text-2xl">真花</p>
-              <p className="mt-1 text-xs text-[#f6e9db]">自然押制</p>
-            </div>
-            <div className="rounded-2xl border border-white/24 bg-white/16 p-3 backdrop-blur-md sm:p-4">
-              <p className="text-xl font-semibold sm:text-2xl">手作</p>
-              <p className="mt-1 text-xs text-[#f6e9db]">每件不同</p>
-            </div>
-            <div className="rounded-2xl border border-white/24 bg-white/16 p-3 backdrop-blur-md sm:p-4">
-              <p className="text-xl font-semibold sm:text-2xl">1:1</p>
-              <p className="mt-1 text-xs text-[#f6e9db]">实物拍摄</p>
-            </div>
-          </div>
-        </div>
-
-          <div className="relative">
-            <div className="absolute -right-7 -top-8 hidden h-32 w-32 rounded-full border border-white/30 bg-white/18 sm:block" />
-            <div className="absolute -bottom-10 -left-8 hidden h-44 w-44 rounded-full bg-[#e7b4c1]/34 blur-2xl sm:block" />
-            <div className="meadow-panel relative overflow-hidden rounded-[24px] p-3 sm:rounded-[30px] sm:p-5">
-            <div className="mb-3 flex items-center justify-between px-1 sm:mb-4">
-              <div>
-                <p className="text-sm font-semibold text-white">沁瓣作品橱窗</p>
-                <p className="mt-1 text-xs text-[#f5e8db]">来自当前店铺上传的实物图</p>
-              </div>
-              <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#263325]">
-                fresh
-              </span>
-            </div>
-
-            <div className="relative group/carousel">
-              {/* 滚动轨道 */}
-              <div
-                ref={carouselRef}
-                onScroll={updateCarouselScales}
-                className="carousel-track flex items-center gap-2 overflow-x-auto scroll-smooth py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                style={{ scrollSnapType: 'x proximity', paddingLeft: 'calc(50% - 80px)', paddingRight: 'calc(50% - 80px)' }}
-              >
-                {heroWorks.map((work: any, idx: number) => (
-                  <div
-                    key={idx}
-                    onClick={() => { if (work.product) setShowcaseProduct(work.product); }}
-                    className={`carousel-item relative shrink-0 overflow-hidden rounded-[18px] bg-[#e6dacb] shadow-lg transition-transform duration-200 ease-out sm:rounded-[22px] ${
-                      work.product ? 'cursor-pointer' : ''
-                    }`}
-                    style={{
-                      width: 'clamp(140px, 40vw, 260px)',
-                      aspectRatio: '4/5',
-                      transform: scales[idx] ? `scale(${scales[idx]})` : 'scale(0.88)',
-                    }}
-                  >
-                    <Image
-                      src={work.image} alt={work.name}
-                      fill
-                      priority={idx < 3}
-                      className="object-cover"
-                      sizes="(max-width: 640px) 140px, (max-width: 1024px) 40vw, 260px"
-                    />
-                    {work.product && (
-                      <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-3 pt-10 transition-opacity ${
-                        scales[idx] && scales[idx] > 1.05 ? 'opacity-100' : 'opacity-0'
-                      }`}>
-                        <p className="text-xs font-medium text-white truncate">{work.name}</p>
-                        <p className="text-sm font-bold text-white">¥{work.product.price}</p>
-                      </div>
-                    )}
+            {/* 橱窗：桌面端 float right 形成环绕效果 */}
+            <div className="showcase-float">
+              <div className="meadow-panel relative overflow-hidden rounded-[24px] p-3 sm:rounded-[30px] sm:p-5">
+                <div className="mb-3 flex items-center justify-between px-1 sm:mb-4">
+                  <div>
+                    <p className="text-sm font-semibold text-white">沁瓣作品橱窗</p>
+                    <p className="mt-1 text-xs text-[#f5e8db]">滑动浏览 · 点击选购</p>
                   </div>
-                ))}
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#263325]">fresh</span>
+                </div>
+                <div className="relative group/carousel">
+                  <div
+                    ref={carouselRef}
+                    onScroll={updateCarouselScales}
+                    className="carousel-track flex items-center gap-2 overflow-x-auto scroll-smooth py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    style={{ scrollSnapType: 'x proximity', paddingLeft: 'calc(50% - 60px)', paddingRight: 'calc(50% - 60px)' }}
+                  >
+                    {heroWorks.map((work: any, idx: number) => (
+                      <div
+                        key={idx}
+                        onClick={() => { if (work.product) setShowcaseProduct(work.product); }}
+                        className={`carousel-item relative shrink-0 overflow-hidden rounded-[18px] bg-[#e6dacb] shadow-lg transition-transform duration-200 ease-out sm:rounded-[22px] ${work.product ? 'cursor-pointer' : ''}`}
+                        style={{
+                          width: 'clamp(120px, 36vw, 220px)',
+                          aspectRatio: '4/5',
+                          transform: scales[idx] ? `scale(${scales[idx]})` : 'scale(0.88)',
+                        }}
+                      >
+                        <Image src={work.image} alt={work.name} fill priority={idx < 3} className="object-cover" sizes="(max-width: 640px) 120px, (max-width: 1024px) 36vw, 220px" />
+                        {work.product && (
+                          <div className={`absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-3 pt-10 transition-opacity ${scales[idx] && scales[idx] > 1.05 ? 'opacity-100' : 'opacity-0'}`}>
+                            <p className="text-xs font-medium text-white truncate">{work.name}</p>
+                            <p className="text-sm font-bold text-white">¥{work.product.price}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 文字：在橱窗左侧自然流动 */}
+            <div>
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/18 px-4 py-2 text-xs font-medium text-white shadow-sm backdrop-blur-md sm:text-sm">
+                <span className="h-2 w-2 rounded-full bg-[#b78d91]" />
+                真花押制 · 每件不同
+              </div>
+
+              <p className="text-[11px] font-semibold tracking-[0.3em] text-[#f4ddc8]/60 uppercase sm:text-xs">QINBAN</p>
+              <h1 className="mt-1 text-7xl font-bold leading-none tracking-[-0.03em] sm:text-[8rem] lg:text-[6.5rem] xl:text-[8rem]">沁瓣</h1>
+              <h2 className="mt-3 text-5xl font-bold tracking-[0.06em] text-[#f4ddc8]/90 sm:text-6xl lg:text-7xl xl:text-8xl">押花艺术</h2>
+              <p className="mt-1 text-[11px] font-medium tracking-[0.22em] text-[#f4ddc8]/50 uppercase sm:text-xs">Pressed Flower Atelier</p>
+
+              <p className="mt-6 text-base leading-relaxed text-[#fff6eb] sm:text-lg sm:leading-snug">把花海的风，留在日常物件里</p>
+              <p className="mt-3 max-w-xl text-sm leading-7 text-[#fff3e4]/75 sm:leading-8">书签、团扇、灯笼、包包等均使用真花制作。每一片花瓣都独一无二，你的也是。</p>
+
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a href="#products" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-[#263325] shadow-[0_16px_35px_rgba(0,0,0,.22)] transition-transform hover:-translate-y-0.5">
+                  查看作品
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                </a>
+                <a href="/admin" className="inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/16 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/24">
+                  管理作品
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </a>
+              </div>
+
+              <div className="mt-7 flex gap-4">
+                <div className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 backdrop-blur-md">
+                  <span className="text-2xl">🌸</span>
+                  <div><p className="text-xs font-semibold tracking-wide">真花</p><p className="text-[10px] text-[#f6e9db]">自然押制</p></div>
+                </div>
+                <div className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 backdrop-blur-md">
+                  <span className="text-2xl">✋</span>
+                  <div><p className="text-xs font-semibold tracking-wide">手作</p><p className="text-[10px] text-[#f6e9db]">每件不同</p></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </section>
 

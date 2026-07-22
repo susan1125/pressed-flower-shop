@@ -187,3 +187,30 @@ img {
       url("/brand/qinban-meadow.jpg") 58% top / cover no-repeat;
   }
 }
+
+.showcase-float {
+  float: none;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .showcase-float {
+    float: right;
+    width: 48%;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .showcase-float {
+    width: 52%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .showcase-float {
+    width: 50%;
+  }
+}
