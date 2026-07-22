@@ -154,7 +154,7 @@ export default function HomePage() {
                     ref={carouselRef}
                     onScroll={updateCarouselScales}
                     className="carousel-track flex items-center gap-2 overflow-x-auto scroll-smooth py-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                    style={{ scrollSnapType: 'x proximity', paddingLeft: 'calc(50% - 60px)', paddingRight: 'calc(50% - 60px)' }}
+                    style={{ paddingLeft: 'calc(50% - 60px)', paddingRight: 'calc(50% - 60px)' }}
                   >
                     {heroWorks.map((work: any, idx: number) => (
                       <div
