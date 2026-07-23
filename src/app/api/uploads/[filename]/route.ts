@@ -7,17 +7,18 @@ export async function GET(
   { params }: { params: Promise<{ filename: string }> }
 ) {
   const { filename } = await params;
+  const decoded = decodeURIComponent(filename);
 
   // Prevent path traversal
-  if (filename.includes('..') || filename.includes('/')) {
+  if (decoded.includes('..') || decoded.includes('/')) {
     return new Response('Not found', { status: 404 });
   }
 
-  const filepath = path.join(process.cwd(), 'public', 'uploads', filename);
+  const filepath = path.join(process.cwd(), 'public', 'uploads', decoded);
 
   try {
     const buffer = readFileSync(filepath);
-    const ext = filename.split('.').pop()?.toLowerCase();
+    const ext = decoded.split('.').pop()?.toLowerCase();
     const mimeTypes: Record<string, string> = {
       jpg: 'image/jpeg',
       jpeg: 'image/jpeg',
