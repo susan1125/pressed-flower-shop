@@ -124,7 +124,12 @@ function ProductManager() {
   const [dragOver, setDragOver] = useState(false);
   const [gallery, setGallery] = useState<string[]>([]);
   const [showGallery, setShowGallery] = useState(false);
+  const [catFilter, setCatFilter] = useState<Category | '全部'>('全部');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const filteredProducts = catFilter === '全部'
+    ? products
+    : products.filter(p => p.category === catFilter);
 
   useEffect(() => { fetchProducts(); loadGallery(); }, []);
 
@@ -228,15 +233,25 @@ function ProductManager() {
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-[#f4ddc8]">WORKS</p>
           <h2 className="mt-1 text-lg font-semibold">
-            产品列表（{products.length}件{products.filter(p => p.featured).length > 0 ? `，${products.filter(p => p.featured).length}件精选` : ''}）
+            产品列表（{products.length}件{catFilter !== '全部' ? `，${filteredProducts.length}件` : ''}）
           </h2>
         </div>
         <button
-          onClick={() => { setEditing(null); setImageUrl(''); setShowForm(true); }}
+          onClick={() => { setEditing(null); setImageUrl(''); setImageUrls([]); setShowForm(true); }}
           className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#263325] shadow-sm transition-transform hover:-translate-y-0.5"
         >
           添加产品
         </button>
+      </div>
+
+      {/* 分类筛选 */}
+      <div className="mb-4 flex gap-1.5 flex-wrap">
+        {(['全部' as const, ...CATEGORIES] as (Category | '全部')[]).map(cat => (
+          <button key={cat} onClick={() => setCatFilter(cat)}
+            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+              catFilter === cat ? 'bg-white text-[#263325] shadow-sm' : 'meadow-panel text-white/80 hover:text-white'
+            }`}>{cat}</button>
+        ))}
       </div>
 
       {showForm && (
@@ -358,7 +373,7 @@ function ProductManager() {
       )}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {products.map((p) => (
+        {filteredProducts.map((p) => (
           <div key={p.id} className={`pressed-paper group overflow-hidden rounded-[20px] ${p.stock === 0 ? 'opacity-55' : ''}`}>
             {/* 图片区 */}
             <div className="relative aspect-square overflow-hidden bg-[#dfe8d8]">
@@ -399,7 +414,7 @@ function ProductManager() {
             </div>
           </div>
         ))}
-        {products.length === 0 && (
+        {filteredProducts.length === 0 && (
           <div className="pressed-paper col-span-full rounded-3xl px-6 py-16 text-center">
             <p className="text-[#8d8176]">暂无产品</p>
           </div>
