@@ -109,32 +109,37 @@ export default function HomePage() {
     ? featuredWorks
     : autoWorks.length >= 4 ? autoWorks : fallbackWorks.map((f) => ({ ...f, product: null }));
 
-  // 滚动时计算 Dock 放大效果
+  const rafRef = useRef<number>(0);
+
+  // 滚动时计算 Dock 放大效果（用 RAF 保证 60fps 丝滑）
   function updateCarouselScales() {
-    const el = carouselRef.current;
-    if (!el || heroWorks.length === 0) return;
-    const viewCenter = el.getBoundingClientRect().left + el.clientWidth / 2;
-    const items = el.querySelectorAll('.carousel-item');
-    const newScales: number[] = [];
-    const maxScale = 1.1;
-    const minScale = 0.88;
-    const influence = el.clientWidth * 0.5;
-    let closestIdx = 0, closestDist = Infinity;
-    items.forEach((item, i) => {
-      const rect = item.getBoundingClientRect();
-      const dist = Math.abs((rect.left + rect.right) / 2 - viewCenter);
-      if (dist < closestDist) { closestDist = dist; closestIdx = i; }
-      const t = Math.max(0, 1 - dist / influence);
-      newScales.push(minScale + (maxScale - minScale) * t * t);
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const el = carouselRef.current;
+      if (!el || heroWorks.length === 0) return;
+      const viewCenter = el.getBoundingClientRect().left + el.clientWidth / 2;
+      const items = el.querySelectorAll('.carousel-item');
+      const newScales: number[] = [];
+      const maxScale = 1.1;
+      const minScale = 0.88;
+      const influence = el.clientWidth * 0.5;
+      let closestIdx = 0, closestDist = Infinity;
+      items.forEach((item, i) => {
+        const rect = item.getBoundingClientRect();
+        const dist = Math.abs((rect.left + rect.right) / 2 - viewCenter);
+        if (dist < closestDist) { closestDist = dist; closestIdx = i; }
+        const t = Math.max(0, 1 - dist / influence);
+        newScales.push(minScale + (maxScale - minScale) * t * t);
+      });
+      setScales(newScales);
+      setShowcaseActive(closestIdx);
     });
-    setScales(newScales);
-    setShowcaseActive(closestIdx);
   }
 
   // 数据加载后初始化缩放
   useEffect(() => {
     const timer = setTimeout(() => updateCarouselScales(), 150);
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, [products]);
 
   return (
