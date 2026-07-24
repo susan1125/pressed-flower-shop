@@ -118,6 +118,7 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
                 <Image src={product.images[0] || '/placeholder.svg'} alt={product.name} width={80} height={80} className="h-20 w-20 rounded-2xl object-cover" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold text-[#2f271f]">{product.name}</p>
+                  {product.size && <p className="text-xs text-[#98887b]">{product.size}</p>}
                   <p className="mt-1 text-sm text-[#817469]">库存 {product.stock} · {min > 1 ? `${min}份起购` : '单件可购'}</p>
                   <p className="mt-2 text-xl font-semibold text-[#b85c62]">¥{total}</p>
                 </div>

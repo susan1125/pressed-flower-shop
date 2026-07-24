@@ -70,6 +70,7 @@ export default function ProductCard({ product, onPurchaseComplete }: { product: 
         <div className="flex flex-col p-3 sm:p-4">
           <h3 className="min-h-10 text-sm font-semibold leading-snug text-[#2c251f] sm:min-h-11 sm:text-base">{product.name}</h3>
           <p className="mt-1 line-clamp-2 min-h-9 text-xs leading-5 text-[#75685c] sm:mt-2 sm:min-h-10 sm:text-sm">{product.description}</p>
+          {product.size && <p className="mt-1 text-xs text-[#98887b]">{product.size}</p>}
           <div className="mt-3 flex items-end justify-between gap-2 sm:mt-4 sm:items-center sm:gap-3">
             <div>
               <p className="text-xs text-[#98887b]">手作价</p>

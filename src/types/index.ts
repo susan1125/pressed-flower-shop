@@ -9,6 +9,7 @@ export interface Product {
   price: number;
   description: string;
   images: string[];
+  size?: string;
   stock: number;
   minOrder: number;
   createdAt: string;

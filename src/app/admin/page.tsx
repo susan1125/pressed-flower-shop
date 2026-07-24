@@ -207,6 +207,7 @@ function ProductManager() {
       price: Number(fd.get('price')),
       description: (fd.get('description') as string) || '',
       images: imageUrls.length > 0 ? imageUrls : [imageUrl || '/placeholder.svg'],
+      size: (fd.get('size') as string) || '',
       stock: Number(fd.get('stock')) || 0,
     };
 
@@ -285,6 +286,11 @@ function ProductManager() {
                 <label className="mb-1 block text-sm font-medium text-[#6f6257]">库存数量</label>
                 <input name="stock" type="number" min="0" defaultValue={editing?.stock ?? 0} className="w-full rounded-2xl border border-[#ded0bd] bg-[#fffaf4] px-4 py-2.5 text-sm outline-none focus:border-[#9a6d64]" />
               </div>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-sm font-medium text-[#6f6257]">尺寸规格</label>
+              <input name="size" defaultValue={editing?.size || ''} className="w-full rounded-2xl border border-[#ded0bd] bg-[#fffaf4] px-4 py-2.5 text-sm outline-none focus:border-[#9a6d64]" placeholder="如：20cm × 30cm" />
             </div>
 
             <div>
