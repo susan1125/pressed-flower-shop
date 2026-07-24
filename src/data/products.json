@@ -869,7 +869,9 @@
     "category": "书签",
     "price": 28,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784874625787.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784874482643",
@@ -880,7 +882,9 @@
     "category": "书签",
     "price": 28,
     "description": "主要花材：飞燕",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875088403.jpg"
+    ],
     "size": "",
     "stock": 5,
     "id": "1784874527269",
@@ -891,7 +895,9 @@
     "category": "书签",
     "price": 14,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875144425.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784874625787",
@@ -902,7 +908,9 @@
     "category": "书签",
     "price": 14,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875826425.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784874663397",
@@ -913,7 +921,9 @@
     "category": "书签",
     "price": 14,
     "description": "主要花材：绣球➕乌厥",
-    "images": [],
+    "images": [
+      "/uploads/local_1784877775085.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784874720353",
@@ -924,7 +934,9 @@
     "category": "画框",
     "price": 38,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784876122440.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875063595",
@@ -935,7 +947,9 @@
     "category": "画框",
     "price": 38,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875364116.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875088403",
@@ -946,7 +960,9 @@
     "category": "画框",
     "price": 38,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875492195.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875144425",
@@ -957,7 +973,9 @@
     "category": "扇子",
     "price": 58,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784874482643.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875208156",
@@ -968,7 +986,9 @@
     "category": "扇子",
     "price": 58,
     "description": "主要材料：竹子和长星花",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875899896.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875364116",
@@ -979,7 +999,9 @@
     "category": "扇子",
     "price": 58,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875393188.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875393188",
@@ -990,7 +1012,9 @@
     "category": "包",
     "price": 118,
     "description": "主要花材：醉蝶花和乌厥",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875208156.jpg"
+    ],
     "size": "",
     "stock": 7,
     "id": "1784875492195",
@@ -1014,7 +1038,9 @@
     "category": "镜子",
     "price": 68,
     "description": "主要花材：乌厥➕绣球",
-    "images": [],
+    "images": [
+      "/uploads/local_1784874663397.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875784443",
@@ -1025,7 +1051,9 @@
     "category": "扇子",
     "price": 58,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875063595.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875826425",
@@ -1036,7 +1064,9 @@
     "category": "镜子",
     "price": 68,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784877697718.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784875899896",
@@ -1047,7 +1077,9 @@
     "category": "书签",
     "price": 14,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784874527269.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784876122440",
@@ -1058,7 +1090,9 @@
     "category": "书签",
     "price": 14,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784874720353.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784876157909",
@@ -1069,7 +1103,9 @@
     "category": "书签",
     "price": 14,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784876157909.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784877697718",
@@ -1080,7 +1116,9 @@
     "category": "书签",
     "price": 14,
     "description": "",
-    "images": [],
+    "images": [
+      "/uploads/local_1784875784443.jpg"
+    ],
     "size": "",
     "stock": 10,
     "id": "1784877775085",
