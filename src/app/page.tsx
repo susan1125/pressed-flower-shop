@@ -8,12 +8,12 @@ import ProductCard from '@/components/ProductCard';
 import BuyModal from '@/components/BuyModal';
 
 const fallbackWorks = [
-  { name: '押花书签', image: '/api/uploads/1784609775977-9ggq5m.jpg' },
-  { name: '押花团扇', image: '/api/uploads/1784609828685-7kkdpo.jpg' },
-  { name: '押花帆布包', image: '/api/uploads/1784609857009-49ylbw.jpg' },
-  { name: '押花圆镜', image: '/api/uploads/1784609874847-htf0el.jpg' },
-  { name: '押花笔记本', image: '/api/uploads/1784609891519-vvyc3j.jpg' },
-  { name: '环形镜子', image: '/api/uploads/1784610179425-3bzsia.jpg' },
+  { name: '押花书签', image: '/uploads/1784609775977-9ggq5m.jpg' },
+  { name: '押花团扇', image: '/uploads/1784609828685-7kkdpo.jpg' },
+  { name: '押花帆布包', image: '/uploads/1784609857009-49ylbw.jpg' },
+  { name: '押花圆镜', image: '/uploads/1784609874847-htf0el.jpg' },
+  { name: '押花笔记本', image: '/uploads/1784609891519-vvyc3j.jpg' },
+  { name: '环形镜子', image: '/uploads/1784610179425-3bzsia.jpg' },
 ];
 
 const PAGE_SIZE = 12;

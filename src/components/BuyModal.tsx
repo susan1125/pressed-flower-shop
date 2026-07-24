@@ -211,7 +211,7 @@ export default function BuyModal({ product, onClose, onSuccess }: Props) {
 
               <div className="mx-auto w-48 h-48 rounded-2xl overflow-hidden bg-white shadow-sm">
                 <Image
-                  src={payMethod === 'wechat' ? '/api/uploads/wechat-pay.jpg' : '/api/uploads/alipay.jpg'}
+                  src={payMethod === 'wechat' ? '/uploads/wechat-pay.jpg' : '/uploads/alipay.jpg'}
                   alt={payMethod === 'wechat' ? '微信收款码' : '支付宝收款码'}
                   width={192} height={192}
                   className="w-full h-full object-contain"
