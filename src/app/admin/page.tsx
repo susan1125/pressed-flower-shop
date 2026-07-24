@@ -147,7 +147,6 @@ function ProductManager() {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('确定删除吗？')) return;
     await fetch(`/api/products/${id}`, { method: 'DELETE' });
     fetchProducts();
   }
