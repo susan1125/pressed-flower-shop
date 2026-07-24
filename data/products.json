@@ -838,21 +838,8 @@
     "createdAt": "2026-07-23T00:00:00.000Z"
   },
   {
-    "id": "1784775741641",
-    "name": "画框",
-    "category": "画框",
-    "price": 38,
-    "description": "",
-    "images": [
-      "/uploads/IMG_0368.jpg"
-    ],
-    "stock": 10,
-    "minOrder": 1,
-    "createdAt": "2026-07-23T00:00:00.000Z"
-  },
-  {
     "id": "1784775741642",
-    "name": "画框",
+    "name": "绣球雏菊画框",
     "category": "画框",
     "price": 38,
     "description": "",
@@ -861,10 +848,11 @@
     ],
     "stock": 10,
     "minOrder": 1,
-    "createdAt": "2026-07-23T00:00:00.000Z"
+    "createdAt": "2026-07-23T00:00:00.000Z",
+    "size": ""
   },
   {
-    "name": "长星花书签",
+    "name": "长星花书签（大）",
     "category": "书签",
     "price": 28,
     "description": "",
@@ -873,6 +861,229 @@
     ],
     "stock": 10,
     "id": "1784862064568",
-    "createdAt": "2026-07-24T03:01:04.568Z"
+    "createdAt": "2026-07-24T03:01:04.568Z",
+    "size": ""
+  },
+  {
+    "name": "飞燕书签（大）",
+    "category": "书签",
+    "price": 28,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784874482643",
+    "createdAt": "2026-07-24T06:28:02.643Z"
+  },
+  {
+    "name": "飞燕书签（大）",
+    "category": "书签",
+    "price": 28,
+    "description": "主要花材：飞燕",
+    "images": [],
+    "size": "",
+    "stock": 5,
+    "id": "1784874527269",
+    "createdAt": "2026-07-24T06:28:47.269Z"
+  },
+  {
+    "name": "长星花书签（小）",
+    "category": "书签",
+    "price": 14,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784874625787",
+    "createdAt": "2026-07-24T06:30:25.787Z"
+  },
+  {
+    "name": "长星花书签（小）",
+    "category": "书签",
+    "price": 14,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784874663397",
+    "createdAt": "2026-07-24T06:31:03.397Z"
+  },
+  {
+    "name": "绣球花书签（小）",
+    "category": "书签",
+    "price": 14,
+    "description": "主要花材：绣球➕乌厥",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784874720353",
+    "createdAt": "2026-07-24T06:32:00.353Z"
+  },
+  {
+    "name": "长星花画框",
+    "category": "画框",
+    "price": 38,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875063595",
+    "createdAt": "2026-07-24T06:37:43.595Z"
+  },
+  {
+    "name": "醉蝶花画框",
+    "category": "画框",
+    "price": 38,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875088403",
+    "createdAt": "2026-07-24T06:38:08.403Z"
+  },
+  {
+    "name": "绣球雏菊画框",
+    "category": "画框",
+    "price": 38,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875144425",
+    "createdAt": "2026-07-24T06:39:04.425Z"
+  },
+  {
+    "name": "蓝花楹扇子",
+    "category": "扇子",
+    "price": 58,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875208156",
+    "createdAt": "2026-07-24T06:40:08.156Z"
+  },
+  {
+    "name": "长星花扇子",
+    "category": "扇子",
+    "price": 58,
+    "description": "主要材料：竹子和长星花",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875364116",
+    "createdAt": "2026-07-24T06:42:44.116Z"
+  },
+  {
+    "name": "醉蝶花扇子",
+    "category": "扇子",
+    "price": 58,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875393188",
+    "createdAt": "2026-07-24T06:43:13.189Z"
+  },
+  {
+    "name": "小号帆布包",
+    "category": "包",
+    "price": 118,
+    "description": "主要花材：醉蝶花和乌厥",
+    "images": [],
+    "size": "",
+    "stock": 7,
+    "id": "1784875492195",
+    "createdAt": "2026-07-24T06:44:52.195Z"
+  },
+  {
+    "name": "长星花笔记本",
+    "category": "笔记本",
+    "price": 58,
+    "description": "笔记本内页为特制花草纸，中性笔可正常书写",
+    "images": [
+      "/uploads/notebook_1784875697305.jpg"
+    ],
+    "size": "",
+    "stock": 5,
+    "id": "1784875697305",
+    "createdAt": "2026-07-24T06:48:17.306Z"
+  },
+  {
+    "name": "环形镜子",
+    "category": "镜子",
+    "price": 68,
+    "description": "主要花材：乌厥➕绣球",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875784443",
+    "createdAt": "2026-07-24T06:49:44.443Z"
+  },
+  {
+    "name": "石竹花扇子",
+    "category": "扇子",
+    "price": 58,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875826425",
+    "createdAt": "2026-07-24T06:50:26.425Z"
+  },
+  {
+    "name": "海棠花镜子",
+    "category": "镜子",
+    "price": 68,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784875899896",
+    "createdAt": "2026-07-24T06:51:39.897Z"
+  },
+  {
+    "name": "紫槿花书签（小）",
+    "category": "书签",
+    "price": 14,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784876122440",
+    "createdAt": "2026-07-24T06:55:22.440Z"
+  },
+  {
+    "name": "绣球花书签（小）",
+    "category": "书签",
+    "price": 14,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784876157909",
+    "createdAt": "2026-07-24T06:55:57.909Z"
+  },
+  {
+    "name": "绣球花书签（小）",
+    "category": "书签",
+    "price": 14,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784877697718",
+    "createdAt": "2026-07-24T07:21:37.718Z"
+  },
+  {
+    "name": "石竹花书签（小）",
+    "category": "书签",
+    "price": 14,
+    "description": "",
+    "images": [],
+    "size": "",
+    "stock": 10,
+    "id": "1784877775085",
+    "createdAt": "2026-07-24T07:22:55.085Z"
   }
 ]

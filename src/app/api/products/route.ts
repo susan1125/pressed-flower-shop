@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   // 分页：默认 12 条
   const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-  const pageSize = Math.min(50, Math.max(4, parseInt(searchParams.get('pageSize') || '12')));
+  const pageSize = Math.min(100, Math.max(4, parseInt(searchParams.get('pageSize') || '12')));
 
   const start = (page - 1) * pageSize;
   const items = all.slice(start, start + pageSize);

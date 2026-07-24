@@ -16,7 +16,7 @@ const fallbackWorks = [
   { name: '环形镜子', image: '/uploads/1784610179425-3bzsia.jpg' },
 ];
 
-const PAGE_SIZE = 24;
+const PAGE_SIZE = 12;
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
