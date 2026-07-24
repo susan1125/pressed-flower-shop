@@ -25,73 +25,88 @@ export default function HomePage() {
   const [showcaseProduct, setShowcaseProduct] = useState<Product | null>(null);
   const [showcaseActive, setShowcaseActive] = useState(0);
   const [scales, setScales] = useState<number[]>([]);
-  const [displayCount, setDisplayCount] = useState(PAGE_SIZE);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [totalProducts, setTotalProducts] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
-
     async function loadInitialProducts() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/products?_t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: { 'Cache-Control': 'no-cache' },
+        const res = await fetch(`/api/products?page=1&pageSize=${PAGE_SIZE}&_t=${Date.now()}`, {
+          cache: 'no-store', headers: { 'Cache-Control': 'no-cache' },
         });
-        if (!res.ok) throw new Error('Failed to load');
+        if (!res.ok) throw new Error('Failed');
         const data = await res.json();
-        if (!cancelled) setProducts(data);
+        if (!cancelled) {
+          setProducts(data.items || []);
+          setHasMore(data.hasMore);
+          setTotalProducts(data.total);
+        }
       } catch {
         if (!cancelled) setProducts([]);
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
-
     void loadInitialProducts();
-
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
-  async function loadProducts(category?: string) {
+  async function loadProducts(category?: string, page = 1) {
     setLoading(true);
     try {
-      const params = category && category !== '全部'
-        ? `?category=${encodeURIComponent(category)}&_t=${Date.now()}`
-        : `?_t=${Date.now()}`;
-      const res = await fetch(`/api/products${params}`, {
-        cache: 'no-store',
-        headers: { 'Cache-Control': 'no-cache' },
+      const parts: string[] = [`page=${page}`, `pageSize=${PAGE_SIZE}`, `_t=${Date.now()}`];
+      if (category && category !== '全部') parts.push(`category=${encodeURIComponent(category)}`);
+      const res = await fetch(`/api/products?${parts.join('&')}`, {
+        cache: 'no-store', headers: { 'Cache-Control': 'no-cache' },
       });
-      if (!res.ok) throw new Error('Failed to load');
+      if (!res.ok) throw new Error('Failed');
       const data = await res.json();
-      setProducts(data);
-    } catch {
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
+      setProducts(data.items || []);
+      setHasMore(data.hasMore);
+      setTotalProducts(data.total);
+    } catch { setProducts([]); }
+    finally { setLoading(false); }
   }
 
   function handleCategoryChange(cat: Category | '全部') {
     setActiveCategory(cat);
-    setDisplayCount(PAGE_SIZE);
-    loadProducts(cat);
+    setCurrentPage(1);
+    loadProducts(cat, 1);
   }
 
-  // 当前显示的产品（分页）
-  const visibleProducts = products.slice(0, displayCount);
-  const hasMore = displayCount < products.length;
+  // 加载更多（追加而不是替换）
+  async function loadMore() {
+    const nextPage = currentPage + 1;
+    try {
+      const parts: string[] = [`page=${nextPage}`, `pageSize=${PAGE_SIZE}`, `_t=${Date.now()}`];
+      if (activeCategory !== '全部') parts.push(`category=${encodeURIComponent(activeCategory)}`);
+      const res = await fetch(`/api/products?${parts.join('&')}`, {
+        cache: 'no-store', headers: { 'Cache-Control': 'no-cache' },
+      });
+      const data = await res.json();
+      setProducts((prev) => [...prev, ...(data.items || [])]);
+      setHasMore(data.hasMore);
+      setCurrentPage(nextPage);
+    } catch {}
+  }
 
   async function handlePurchaseComplete() {
     try {
-      const res = await fetch(`/api/products?_t=${Date.now()}`, {
-        cache: 'no-store',
-        headers: { 'Cache-Control': 'no-cache' },
+      const parts = [`page=1`, `pageSize=${PAGE_SIZE * currentPage}`, `_t=${Date.now()}`];
+      if (activeCategory !== '全部') parts.push(`category=${encodeURIComponent(activeCategory)}`);
+      const res = await fetch(`/api/products?${parts.join('&')}`, {
+        cache: 'no-store', headers: { 'Cache-Control': 'no-cache' },
       });
-      if (res.ok) setProducts(await res.json());
+      if (res.ok) {
+        const data = await res.json();
+        setProducts(data.items || []);
+        setHasMore(data.hasMore);
+        setTotalProducts(data.total);
+      }
     } catch {}
   }
 
@@ -265,14 +280,14 @@ export default function HomePage() {
         ) : (
           <>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-              {visibleProducts.map((product) => (
+              {products.map((product) => (
                 <ProductCard key={product.id} product={product} onPurchaseComplete={handlePurchaseComplete} />
               ))}
             </div>
             {hasMore && (
               <div className="mt-8 text-center">
-                <button onClick={() => setDisplayCount((prev) => prev + PAGE_SIZE)} className="rounded-full border border-white/40 bg-white/14 px-8 py-3 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/24">
-                  查看更多（还有 {products.length - displayCount} 件）
+                <button onClick={loadMore} className="rounded-full border border-white/40 bg-white/14 px-8 py-3 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/24">
+                  查看更多（还有 {totalProducts - products.length} 件）
                 </button>
               </div>
             )}
