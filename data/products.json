@@ -1378,32 +1378,6 @@
     "createdAt": "2026-07-23T00:00:00.000Z"
   },
   {
-    "id": "1784775741637",
-    "name": "冰箱贴",
-    "category": "冰箱贴",
-    "price": 15,
-    "description": "",
-    "images": [
-      "/api/uploads/IMG_0340.jpg"
-    ],
-    "stock": 1,
-    "minOrder": 2,
-    "createdAt": "2026-07-23T00:00:00.000Z"
-  },
-  {
-    "id": "1784775741638",
-    "name": "冰箱贴",
-    "category": "冰箱贴",
-    "price": 15,
-    "description": "",
-    "images": [
-      "/api/uploads/IMG_0341.jpg"
-    ],
-    "stock": 1,
-    "minOrder": 2,
-    "createdAt": "2026-07-23T00:00:00.000Z"
-  },
-  {
     "id": "1784775741639",
     "name": "画框",
     "category": "画框",
@@ -1453,71 +1427,6 @@
     ],
     "stock": 1,
     "minOrder": 1,
-    "createdAt": "2026-07-23T00:00:00.000Z"
-  },
-  {
-    "id": "1784775741643",
-    "name": "冰箱贴",
-    "category": "冰箱贴",
-    "price": 15,
-    "description": "",
-    "images": [
-      "/api/uploads/IMG_0370 2.jpg"
-    ],
-    "stock": 1,
-    "minOrder": 2,
-    "createdAt": "2026-07-23T00:00:00.000Z"
-  },
-  {
-    "id": "1784775741644",
-    "name": "冰箱贴",
-    "category": "冰箱贴",
-    "price": 15,
-    "description": "",
-    "images": [
-      "/api/uploads/IMG_0371 2.jpg"
-    ],
-    "stock": 1,
-    "minOrder": 2,
-    "createdAt": "2026-07-23T00:00:00.000Z"
-  },
-  {
-    "id": "1784775741645",
-    "name": "冰箱贴",
-    "category": "冰箱贴",
-    "price": 15,
-    "description": "",
-    "images": [
-      "/api/uploads/IMG_0372 2.jpg"
-    ],
-    "stock": 1,
-    "minOrder": 2,
-    "createdAt": "2026-07-23T00:00:00.000Z"
-  },
-  {
-    "id": "1784775741646",
-    "name": "冰箱贴",
-    "category": "冰箱贴",
-    "price": 15,
-    "description": "",
-    "images": [
-      "/api/uploads/IMG_0373 2.jpg"
-    ],
-    "stock": 1,
-    "minOrder": 2,
-    "createdAt": "2026-07-23T00:00:00.000Z"
-  },
-  {
-    "id": "1784775741647",
-    "name": "冰箱贴",
-    "category": "冰箱贴",
-    "price": 15,
-    "description": "",
-    "images": [
-      "/api/uploads/IMG_0374 2.jpg"
-    ],
-    "stock": 1,
-    "minOrder": 2,
     "createdAt": "2026-07-23T00:00:00.000Z"
   },
   {
