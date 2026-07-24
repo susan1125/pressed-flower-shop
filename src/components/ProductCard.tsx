@@ -15,7 +15,7 @@ export default function ProductCard({ product, onPurchaseComplete }: { product: 
   return (
     <>
       <article className={`pressed-paper group overflow-hidden rounded-[22px] transition-transform duration-300 hover:-translate-y-1 ${soldOut ? 'opacity-55' : ''}`}>
-        <div className="relative aspect-[4/5] overflow-hidden bg-[#dfe8d8]">
+        <div className="relative aspect-square overflow-hidden bg-[#dfe8d8]">
           <Image
             src={images[imgIdx] || '/placeholder.svg'}
             alt={`${product.name}${hasMultiple ? ` · ${imgIdx + 1}` : ''}`}
