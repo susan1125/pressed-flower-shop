@@ -125,6 +125,8 @@ function ProductManager() {
   const [gallery, setGallery] = useState<string[]>([]);
   const [showGallery, setShowGallery] = useState(false);
   const [catFilter, setCatFilter] = useState<Category | '全部'>('全部');
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [batchStock, setBatchStock] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const filteredProducts = catFilter === '全部'
@@ -187,6 +189,28 @@ function ProductManager() {
     fetchProducts();
   }
 
+  // 批量操作
+  function toggleSelectAll() {
+    if (selected.size === filteredProducts.length) setSelected(new Set());
+    else setSelected(new Set(filteredProducts.map(p => p.id)));
+  }
+  function toggleSelectId(id: string) {
+    const next = new Set(selected);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setSelected(next);
+  }
+  async function batchSetStock() {
+    const stock = parseInt(batchStock);
+    if (isNaN(stock) || stock < 0) { alert('请输入有效的库存数量'); return; }
+    for (const id of selected) {
+      await fetch(`/api/products/${id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stock }),
+      });
+    }
+    setSelected(new Set()); setBatchStock(''); fetchProducts();
+  }
+
   async function uploadImage(file: File) {
     setUploading(true);
     const fd = new FormData();
@@ -242,7 +266,20 @@ function ProductManager() {
         >
           添加产品
         </button>
+        <button onClick={toggleSelectAll} className="rounded-full border border-white/40 bg-white/14 px-3 py-1.5 text-xs text-white backdrop-blur">
+          {selected.size === filteredProducts.length ? '取消全选' : '全选'}
+        </button>
       </div>
+
+      {/* 批量操作栏 */}
+      {selected.size > 0 && (
+        <div className="meadow-panel mb-4 flex items-center gap-3 rounded-[20px] p-3 text-white text-sm">
+          <span className="font-semibold">已选 {selected.size} 件</span>
+          <input type="number" value={batchStock} onChange={(e) => setBatchStock(e.target.value)} placeholder="库存数" className="w-20 rounded-xl border border-white/40 bg-white/18 px-3 py-1.5 text-sm text-white placeholder-white/40 outline-none backdrop-blur" />
+          <button onClick={batchSetStock} className="rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-[#263325] shadow-sm">批量设库存</button>
+          <button onClick={() => { setSelected(new Set()); setBatchStock(''); }} className="rounded-full border border-white/40 bg-white/14 px-3 py-1.5 text-xs text-white/80 backdrop-blur">取消选择</button>
+        </div>
+      )}
 
       {/* 分类筛选 */}
       <div className="mb-4 flex gap-1.5 flex-wrap">
@@ -379,7 +416,14 @@ function ProductManager() {
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {filteredProducts.map((p) => (
-          <div key={p.id} className={`pressed-paper group overflow-hidden rounded-[20px] ${p.stock === 0 ? 'opacity-55' : ''}`}>
+          <div key={p.id} className={`pressed-paper group overflow-hidden rounded-[20px] ${p.stock === 0 ? 'opacity-55' : ''} relative`}>
+            {/* 勾选框 */}
+            <button
+              onClick={() => toggleSelectId(p.id)}
+              className={`absolute right-2 top-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors ${
+                selected.has(p.id) ? 'border-[#31523a] bg-[#31523a] text-white' : 'border-white/60 bg-white/60 text-transparent hover:border-[#31523a]'
+              }`}
+            >✓</button>
             {/* 图片区 */}
             <div className="relative aspect-square overflow-hidden bg-[#dfe8d8]">
               <img src={p.images[0] || '/placeholder.svg'} alt={p.name} className="h-full w-full object-cover" />
