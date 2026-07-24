@@ -67,20 +67,20 @@ export default function ProductCard({ product, onPurchaseComplete }: { product: 
           )}
         </div>
 
-        <div className="flex flex-col p-3 sm:p-4">
-          <h3 className="min-h-10 text-sm font-semibold leading-snug text-[#2c251f] sm:min-h-11 sm:text-base">{product.name}</h3>
-          <p className="mt-1 line-clamp-2 min-h-9 text-xs leading-5 text-[#75685c] sm:mt-2 sm:min-h-10 sm:text-sm">{product.description}</p>
-          {product.size && <p className="mt-1 text-xs text-[#98887b]">{product.size}</p>}
-          <div className="mt-3 flex items-end justify-between gap-2 sm:mt-4 sm:items-center sm:gap-3">
+        <div className="flex flex-col p-2.5 sm:p-3">
+          <h3 className="min-h-8 text-xs font-semibold leading-snug text-[#2c251f] sm:text-sm">{product.name}</h3>
+          <p className="mt-0.5 line-clamp-1 text-[11px] leading-4 text-[#75685c]">{product.description}</p>
+          {product.size && <p className="mt-0.5 text-[11px] text-[#98887b]">{product.size}</p>}
+          <div className="mt-2 flex items-end justify-between gap-1.5 sm:mt-2.5 sm:gap-2">
             <div>
-              <p className="text-xs text-[#98887b]">手作价</p>
-              <p className="text-lg font-semibold text-[#b85c62] sm:text-xl">¥{product.price}</p>
+              <p className="text-[10px] text-[#98887b]">手作价</p>
+              <p className="text-sm font-semibold text-[#b85c62] sm:text-base">¥{product.price}</p>
             </div>
             <button
               type="button"
               onClick={() => setShowBuy(true)}
               disabled={soldOut}
-              className={`shrink-0 rounded-full px-3 py-2 text-xs font-semibold transition-colors sm:px-4 sm:text-sm ${
+              className={`shrink-0 rounded-full px-2.5 py-1.5 text-[11px] font-semibold transition-colors sm:px-3 sm:text-xs ${
                 soldOut
                   ? 'bg-[#e5ddd3] text-[#91867a]'
                   : 'bg-[#31523a] text-white shadow-sm hover:bg-[#263f2d]'
